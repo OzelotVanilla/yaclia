@@ -1,0 +1,96 @@
+---
+Language: Cpp
+# BasedOnStyle: LLVM
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+MaxEmptyLinesToKeep: 3
+
+# 指针符号对齐
+DerivePointerAlignment: false
+SpaceAroundPointerQualifiers: Default
+PointerAlignment: Left
+
+# 连续赋值时，对齐所有等号
+AlignConsecutiveAssignments: true
+
+# 连续声明时，对齐所有声明的变量名
+AlignConsecutiveDeclarations: true
+
+# 允许函数声明的所有参数在放在下一行
+AllowAllParametersOfDeclarationOnNextLine: false
+# 允许短的块放在同一行
+AllowShortBlocksOnASingleLine: true
+# 允许短的case标签放在同一行
+AllowShortCaseLabelsOnASingleLine: false
+# 允许短的函数放在同一行: None, InlineOnly(定义在类中), Empty(空函数), Inline(定义在类中，空函数), All
+AllowShortFunctionsOnASingleLine: Empty
+# 允许短的if语句保持在同一行
+AllowShortIfStatementsOnASingleLine: true
+# 允许短的循环保持在同一行
+AllowShortLoopsOnASingleLine: true
+# How Long it will spilt a line
+ColumnLimit: 0
+IncludeCategories:
+  - Regex: "<"
+    Priority: -1
+
+
+
+# 模板声明后换行
+AlwaysBreakTemplateDeclarations: true
+
+# 函数调用尾括号单独分行
+AlignAfterOpenBracket: BlockIndent
+
+# 允许参数单个/多个在一行，而不是一行只能有一个参数
+BinPackArguments: true
+BinPackParameters: true
+
+# 空代码块添加空格
+SpaceInEmptyBlock: true
+
+# 允许短的枚举在一行
+AllowShortEnumsOnASingleLine: true
+
+# 允许短的匿名函数在一行
+AllowShortLambdasOnASingleLine: Inline
+
+#
+AlignOperands: Align
+BreakBeforeBinaryOperators: NonAssignment
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterClass: true
+    # 控制语句后面
+    AfterControlStatement: true
+    # enum定义后面
+    AfterEnum: true
+    # 函数定义后面
+    AfterFunction: true
+    # 命名空间定义后面
+    AfterNamespace: true
+    # ObjC定义后面
+    AfterObjCDeclaration: true
+    # struct定义后面
+    AfterStruct: true
+    # union定义后面
+    AfterUnion: true
+    # catch之前
+    BeforeCatch: true
+    # else之前
+    BeforeElse: true
+    # 缩进大括号
+    IndentBraces: false
+    # 分割空函数
+    SplitEmptyFunction: true
+    # 分割空记录
+    SplitEmptyRecord: true
+    # 分割空命名空间
+    SplitEmptyNamespace: true
+    # 匿名函数
+    BeforeLambdaBody: true
+
+Cpp11BracedListStyle: false
+
