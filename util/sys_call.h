@@ -7,6 +7,12 @@ namespace sys_call_namesp
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * Get the 
+ * 
+ * @param command The command to execute, and get result
+ * @return The result of 
+ */
 string getShellOutput(string command);
 
 /**

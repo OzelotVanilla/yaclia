@@ -16,11 +16,10 @@ string sys_call_namesp::getShellOutput(string command)
  */
 string sys_call_namesp::getFromStream(FILE* stream)
 {
-    let*  result_buf = new std::stringstream();
-    char  buffer[64];
-    char* output_line;
+    let* result_buf = new std::stringstream();
+    char buffer[64];
 
-    while ((output_line = fgets(buffer, 64, stream)) != nullptr)
+    while (fgets(buffer, 64, stream) != nullptr)
     {
         *result_buf << buffer;
     }

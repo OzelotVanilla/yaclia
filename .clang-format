@@ -94,3 +94,6 @@ BraceWrapping:
 
 Cpp11BracedListStyle: false
 
+# Do not sort include, using
+SortIncludes: false
+SortUsingDeclarations: false

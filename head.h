@@ -10,6 +10,7 @@
 #include <map>
 #include <queue>
 #include <vector>
+#include <list>
 
 #include <cmath>
 #include <functional>
@@ -22,8 +23,12 @@ using std::endl;
 
 using std::function;
 using std::string;
+using std::vector;
+using std::array;
+using std::list;
 
-typedef int8_t byte;
+typedef int8_t  byte;
+typedef wchar_t uchar;
 
 #define lambda(...) [](__VA_ARGS__)
 #define lambda_ref(...) [&](__VA_ARGS__)

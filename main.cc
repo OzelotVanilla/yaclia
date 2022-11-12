@@ -2,10 +2,11 @@
 
 int main(int argc, char const* argv[])
 {
-    std::system("tput smcup");
-    clearScreen();
-    ConsoleConfig* console_config = new ConsoleConfig();
-    input("Waiting: ");
-    std::system("tput rmcup");
+    // Create main screen
+
+    //  Main Process
+    while (true)
+    {
+    }
     return 0;
 }
