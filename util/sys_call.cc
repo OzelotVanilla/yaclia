@@ -8,12 +8,6 @@ string sys_call_namesp::getShellOutput(string command)
 }
 
 
-/**
- * @brief Read from a FILE stream until finished
- *
- * @param stream FILE stream object
- * @return Content in the FILE
- */
 string sys_call_namesp::getFromStream(FILE* stream)
 {
     let* result_buf = new std::stringstream();
@@ -29,4 +23,17 @@ string sys_call_namesp::getFromStream(FILE* stream)
     boost::trim(result);
     delete result_buf;
     return result;
+}
+
+
+void sys_call_namesp::registerSignalHandler(UnixSignal sig, SignalHandlerFunc f)
+{
+    sys_call_namesp::signal_unix_namesp::signal(int(sig), f);
+}
+
+
+void sys_call_namesp::unregisterSignalHandler(UnixSignal sig)
+{
+    using sys_call_namesp::signal_unix_namesp::__sighandler_t;
+    sys_call_namesp::signal_unix_namesp::signal(int(sig), SIG_DFL);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../head.h"
+#include "../../signal/UnixSignal.h"
 #include "ConsoleConfig.h"
 #include "ViewInfo.h"
 
@@ -37,7 +38,7 @@
     /**
      * The info about position that is used to draw.
      */
-    ViewDrawInfo* draw_info;
+    ViewDrawInfo draw_info;
 
     /**
      * A shared config of current console.

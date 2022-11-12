@@ -85,6 +85,18 @@ inline bool approxEqual(double a, double b)
     return abs(a - b) < 0.000001;
 }
 
+template <typename EleType>
+inline size_t len(const vector<EleType>& container)
+{
+    return container.size();
+}
+
+template <typename EleType>
+inline size_t len(const list<EleType>& container)
+{
+    return container.size();
+}
+
 /**
  * @brief Function to get the first index of the value fulfill checker.
  *

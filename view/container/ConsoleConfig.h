@@ -9,10 +9,6 @@
 
 #define constructor ConsoleConfig
 
-class ConsoleConfig;
-
-static ConsoleConfig main_console_config = ConsoleConfig();
-
 
 class ConsoleConfig
 {

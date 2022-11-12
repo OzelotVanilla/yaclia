@@ -13,6 +13,10 @@
 class Window : public ViewContainer
 {
   public:
+    /* virtual */ void draw();
+    /* virtual */ void updateConsoleRelatedInfo();
+
+  public:
     constructor();
 
   private:

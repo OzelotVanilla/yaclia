@@ -5,7 +5,7 @@ void Screen::draw()
     // Let each window draw itself
     for (Window* window : *this->window_binded)
     {
-        this->draw();
+        window->draw();
     }
 }
 

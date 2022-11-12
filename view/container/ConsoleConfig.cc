@@ -1,5 +1,6 @@
 #include "ConsoleConfig.h"
 
+
 int ConsoleConfig::getHeight()
 {
     this->update();
