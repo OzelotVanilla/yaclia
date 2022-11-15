@@ -34,9 +34,12 @@ class ViewManager
     void handleSignal();
 
   private:
-    vector<Screen*> screens;
+    vector<Screen*>* screens;
 
     bool should_run = true;
+
+  public:
+    constructor();
 };
 
 static ViewManager view_manager = ViewManager();

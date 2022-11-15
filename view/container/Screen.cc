@@ -1,7 +1,20 @@
 #include "Screen.h"
 
+
 void Screen::draw()
 {
+    // Draw the background
+    {
+        moveCursorTo(this->draw_info.position_from_left, this->draw_info.position_from_top);
+        let line_to_fill = string(this->draw_info.size_horizontal, this->background_char);
+
+        for (size_t line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
+        {
+            cout << line_to_fill;
+        }
+    }
+
+
     // Let each window draw itself
     for (Window* window : *this->window_binded)
     {
@@ -35,6 +48,12 @@ Screen& Screen::deleteWindow()
     return this->popOutWindow();
 }
 
+Screen& Screen::setBackgroundChar(uchar c)
+{
+    this->background_char = c;
+    return *this;
+}
+
 Screen::constructor()
 {
     delegate(ConsoleConfig());
@@ -42,6 +61,8 @@ Screen::constructor()
 
 Screen::constructor(ConsoleConfig c)
 {
-    this->console_config = &c;
-    this->window_binded  = new vector<Window*>();
+    this->console_config            = &c;
+    this->window_binded             = new vector<Window*>();
+    this->draw_info.size_horizontal = c.getWidth();
+    this->draw_info.size_vertical   = c.getHeight();
 }

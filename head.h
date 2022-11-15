@@ -27,8 +27,8 @@ using std::vector;
 using std::array;
 using std::list;
 
-typedef int8_t  byte;
-typedef wchar_t uchar;
+typedef int8_t byte;
+typedef char   uchar;
 
 #define lambda(...) [](__VA_ARGS__)
 #define lambda_ref(...) [&](__VA_ARGS__)
@@ -59,6 +59,11 @@ inline int parseInt(string s, int radix)
     }
 
     return std::stoi(s, nullptr, radix);
+}
+
+inline string parseString(int num)
+{
+    return std::to_string(num);
 }
 
 inline string input()

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../head.h"
-#include "../../signal/UnixSignal.h"
+#include "../../system/signal/UnixSignal.h"
 #include "ConsoleConfig.h"
 #include "ViewInfo.h"
 

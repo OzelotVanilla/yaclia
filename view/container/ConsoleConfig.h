@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../head.h"
-#include "../../util/sys_call.h"
+#include "../../system/sys_call.h"
 
 #ifdef constructor
 #undef constructor
