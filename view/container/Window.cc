@@ -13,6 +13,11 @@
 }
 
 
+void Window::updateCharView()
+{
+}
+
+
 Window::constructor()
 {
     delegate(40, 20, 1, 1);

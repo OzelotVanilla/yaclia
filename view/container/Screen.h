@@ -14,12 +14,6 @@
 #define constructor Screen
 
 
-class Screen;
-
-namespace view_container_screen
-{
-static let screen_stack = vector<Screen>();
-} // namespace view_container_screen
 
 /**
  * Screen of the
@@ -36,6 +30,9 @@ class Screen : public ViewContainer
     inline Screen& deleteWindow();
 
     /* virtual */ void draw();
+
+    /* virtual */ void updateCharView();
+
     /* virtual */ void updateConsoleRelatedInfo();
 
     Screen& setBackgroundChar(uchar c);

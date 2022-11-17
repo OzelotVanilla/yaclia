@@ -38,4 +38,9 @@ class ViewDrawInfo
      * represented in unit of actual console char.
      */
     int size_vertical = 0;
+
+    /**
+     * Char represent of the ViewContainer.
+     */
+    vector<string> char_view;
 };

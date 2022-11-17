@@ -67,7 +67,7 @@ void sys_call_namesp::setCurrentConsoleNonBlocking()
     // Get console previous setting
     termios current_console_setting;
     tcgetattr(0, &current_console_setting);
-    current_console_setting.c_lflag &= ~(ICANON | ECHO);
+    current_console_setting.c_lflag &= ~(ICANON bitor ECHO);
     tcsetattr(0, TCSANOW, &current_console_setting);
 }
 

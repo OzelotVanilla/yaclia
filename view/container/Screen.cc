@@ -3,17 +3,27 @@
 
 void Screen::draw()
 {
-    // Draw the background
+    // Update if need
+    if (this->need_to_update_char_view)
     {
-        moveCursorTo(this->draw_info.position_from_left, this->draw_info.position_from_top);
-        let line_to_fill = string(this->draw_info.size_horizontal, this->background_char);
-
-        for (size_t line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
-        {
-            cout << line_to_fill;
-        }
+        this->updateCharView();
+        this->need_to_update_char_view = false;
+        this->need_to_draw             = true;
     }
 
+    // Draw the background, if the screen itself is changed
+    if (this->need_to_draw)
+    {
+        const let from_left = this->draw_info.position_from_left;
+        const let from_top  = this->draw_info.position_from_top;
+        const let size_vert = this->draw_info.size_vertical;
+
+        for (size_t line_index = 0; line_index < size_vert; line_index++)
+        {
+            moveCursorTo(from_left, from_top + line_index);
+            cout << this->draw_info.char_view[line_index];
+        }
+    }
 
     // Let each window draw itself
     for (Window* window : *this->window_binded)
@@ -21,6 +31,18 @@ void Screen::draw()
         window->draw();
     }
 }
+
+
+void Screen::updateCharView()
+{
+    const let line_to_fill = string(this->draw_info.size_horizontal, this->background_char);
+
+    for (size_t line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
+    {
+        this->draw_info.char_view[line_index] = line_to_fill;
+    }
+}
+
 
 void Screen::updateConsoleRelatedInfo()
 {
@@ -50,7 +72,8 @@ Screen& Screen::deleteWindow()
 
 Screen& Screen::setBackgroundChar(uchar c)
 {
-    this->background_char = c;
+    this->background_char          = c;
+    this->need_to_update_char_view = true;
     return *this;
 }
 
@@ -63,6 +86,9 @@ Screen::constructor(ConsoleConfig c)
 {
     this->console_config            = &c;
     this->window_binded             = new vector<Window*>();
+    this->need_to_update_char_view  = true;
     this->draw_info.size_horizontal = c.getWidth();
     this->draw_info.size_vertical   = c.getHeight();
+    this->draw_info.char_view       = vector<string>();
+    this->draw_info.char_view.reserve(this->draw_info.size_vertical);
 }

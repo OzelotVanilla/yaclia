@@ -3,7 +3,7 @@
 #include "../../head.h"
 #include "../../system/signal/UnixSignal.h"
 #include "ConsoleConfig.h"
-#include "ViewInfo.h"
+#include "ViewDrawInfo.h"
 
 #ifdef constructor
 #undef constructor
@@ -31,6 +31,8 @@
      */
     virtual void draw() = 0;
 
+    virtual void updateCharView() = 0;
+
   private:
     virtual void updateConsoleRelatedInfo() = 0;
 
@@ -44,4 +46,8 @@
      * A shared config of current console.
      */
     ConsoleConfig* console_config;
+
+    bool need_to_draw; // TODO What is the meaning of this ?
+
+    bool need_to_update_char_view;
 };

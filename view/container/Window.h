@@ -16,6 +16,7 @@ class Window : public ViewContainer
 {
   public:
     /* virtual */ void draw();
+    /* virtual */ void updateCharView();
     /* virtual */ void updateConsoleRelatedInfo();
 
     Window& move(int to_left, int to_up);

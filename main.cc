@@ -18,6 +18,8 @@ int main(int argc, char const* argv[])
     //     view_manager.draw();
     // }
     let pos = getCursorPosition();
+    moveCursorTo(5, 5);
+    input("Input here: ");
 
 
     view_manager.end();
@@ -29,6 +31,7 @@ void registerAllSignalHandler()
 {
     registerSignalHandler(UnixSignal::interrupt, onInterrupt);
 }
+
 
 void onInterrupt(int sig)
 {

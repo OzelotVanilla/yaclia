@@ -79,12 +79,6 @@ inline string input(string prompt)
     return input();
 }
 
-inline void clearScreen()
-{
-    // cout << "\033[J";
-    cout << "\033[H\033[J";
-}
-
 inline bool approxEqual(double a, double b)
 {
     return abs(a - b) < 0.000001;

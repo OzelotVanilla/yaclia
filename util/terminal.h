@@ -17,3 +17,10 @@ void moveCursorTo(int from_left, int from_top);
 inline void moveCursorTo(CursorPosition pos);
 
 CursorPosition getCursorPosition();
+
+inline void resetTerminalToDefault();
+
+/**
+ * Clean the whole screen.
+ */
+inline void clearTerminal();
