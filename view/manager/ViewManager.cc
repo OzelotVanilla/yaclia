@@ -78,19 +78,21 @@ ViewManager& ViewManager::popScreen()
 ViewManager& ViewManager::start()
 {
     // system("tput smcup");
-    ncurses::initscr();
-    ncurses::keypad(ncurses::stdscr, true);
-    ncurses::wtimeout(ncurses::stdscr, 0); // Input should not be blocked (?)
-    // setCurrentConsoleNonBlocking();
+    // ncurses::initscr();
+    // ncurses::keypad(ncurses::stdscr, true);
+    // ncurses::wtimeout(ncurses::stdscr, 0); // Input should not be blocked (?)
+
+    // Make the current console non-blocking and non-echo-input
+    setCurrentConsoleNonBlocking();
     return *this;
 }
 
 
 ViewManager& ViewManager::end()
 {
-    ncurses::clear();
-    ncurses::endwin();
-    // setCurrentConsoleDefault();
+    // ncurses::clear();
+    // ncurses::endwin();
+    setCurrentConsoleDefault();
     // system("tput rmcup");
     return *this;
 }
@@ -99,7 +101,7 @@ ViewManager& ViewManager::end()
 ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 {
     // If this is directly affecting view manager
-    
+
     return *this;
 }
 

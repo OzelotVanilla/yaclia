@@ -59,25 +59,44 @@ string sys_call_namesp::getANSIResponse(string command, char ending_sign)
 
 void sys_call_namesp::setCurrentConsoleNonBlocking()
 {
-    // Idea from: https://stackoverflow.com/questions/50884685/how-to-get-cursor-position-in-c-using-ansi-code
-    // Get console previous setting
+    // Idea from: https://stackoverflow.com/questions/46142246/getchar-with-non-canonical-mode-on-unix-and-windows
+#ifdef _env_linux
     termios current_console_setting;
     tcgetattr(0, &current_console_setting);
     current_console_setting.c_lflag &= ~(ICANON bitor ECHO);
     tcsetattr(0, TCSANOW, &current_console_setting);
+#elif _env_windows
+    DWORD  current_console_mode;
+    HANDLE current_console = GetStdHandle(STD_INPUT_HANDLE);
+
+    GetConsoleMode(current_console, &current_console_mode);
+    SetConsoleMode(current_console, current_console_mode & ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT));
+#endif
 }
 
 
 void sys_call_namesp::setCurrentConsoleDefault()
 {
+#ifdef _env_linux
     tcsetattr(0, TCSANOW, &default_console);
+#elif _env_windows
+    SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), default_console));
+#endif
 }
 
 
-
+#ifdef _env_linux
 sys_call_namesp::termios sys_call_namesp::getDefaultConsole()
 {
     termios state;
     tcgetattr(0, &state);
     return state;
 }
+#elif _env_windows
+sys_call_namesp::DWORD sys_call_namesp::getDefaultConsole()
+{
+    DWORD mode;
+    GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
+    return mode;
+}
+#endif

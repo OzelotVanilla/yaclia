@@ -17,11 +17,29 @@
 #include <random>
 #include <time.h>
 
+// Macro flags for system
+#ifdef __linux__
+#define _env_linux 1
+#elif _WIN32
+#define _env_windows 1
+#endif
+
 namespace ncurses
 {
 #include <curses.h>
 #include <ncurses.h>
 } // namespace ncurses
+
+namespace stdio
+{
+#include <stdio.h>
+#ifdef stdin
+#undef stdin
+#endif
+const FILE* stdin = stdin;
+} // namespace stdio
+using stdio::stdin;
+
 
 using std::cin;
 using std::cout;

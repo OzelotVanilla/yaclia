@@ -10,8 +10,14 @@ namespace sys_call_namesp
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h>
 
+/* Console related files' include*/;
+#ifdef _env_linux
+#include <termios.h>
+#elif _env_windows
+#include <windows.h>
+#endif
+/* End of console related files' include*/;
 
 /**
  * Function accepting int, return void, to handle signal.
@@ -76,11 +82,18 @@ void setCurrentConsoleNonBlocking();
 
 void setCurrentConsoleDefault();
 
-
+#ifdef _env_linux
 termios getDefaultConsole();
+#elif _env_windows
+DWORD getDefaultConsole();
+#endif
 
+static let default_console = getDefaultConsole();
 
-static termios default_console = getDefaultConsole();
+// Alternative Screen Related
+
+void changeToAlternativeScreen();
+void backFromAlternativeScreen();
 
 } // namespace sys_call_namesp
 
