@@ -1,4 +1,3 @@
-#include <boost/algorithm/string.hpp>
 #include "sys_call.h"
 
 
@@ -10,6 +9,7 @@ string sys_call_namesp::getShellOutput(string command)
 
 string sys_call_namesp::getFromStream(FILE* stream)
 {
+
     let* result_buf = new std::stringstream();
     char buffer[64];
 
@@ -20,12 +20,13 @@ string sys_call_namesp::getFromStream(FILE* stream)
 
     // Trim result
     let result = result_buf->str();
-    boost::trim(result);
+    string_process::trim(result);
     delete result_buf;
     return result;
 }
 
 
+#ifdef _env_linux
 void sys_call_namesp::registerSignalHandler(UnixSignal sig, SignalHandlerFunc f)
 {
     let result = signal_unix_namesp::signal(int(sig), f);
@@ -37,6 +38,8 @@ void sys_call_namesp::unregisterSignalHandler(UnixSignal sig)
 {
     signal_unix_namesp::signal(int(sig), SIG_DFL);
 }
+#elif _env_windows
+#endif
 
 
 string sys_call_namesp::getANSIResponse(string command, char ending_sign)
@@ -75,28 +78,53 @@ void sys_call_namesp::setCurrentConsoleNonBlocking()
 }
 
 
-void sys_call_namesp::setCurrentConsoleDefault()
+void sys_call_namesp::setCurrentConsoleDefaultState()
 {
 #ifdef _env_linux
-    tcsetattr(0, TCSANOW, &default_console);
+    tcsetattr(0, TCSANOW, &default_console_state);
 #elif _env_windows
-    SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), default_console));
+    SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), default_console_state);
 #endif
 }
 
 
 #ifdef _env_linux
-sys_call_namesp::termios sys_call_namesp::getDefaultConsole()
+sys_call_namesp::termios sys_call_namesp::getDefaultConsoleState()
 {
     termios state;
     tcgetattr(0, &state);
     return state;
 }
 #elif _env_windows
-sys_call_namesp::DWORD sys_call_namesp::getDefaultConsole()
+DWORD sys_call_namesp::getDefaultConsoleState()
 {
     DWORD mode;
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
     return mode;
+}
+#endif
+
+
+void sys_call_namesp::changeToAlternativeScreen()
+{
+#ifdef _env_linux
+    system("tput smcup");
+#elif _env_windows
+#endif
+}
+void sys_call_namesp::backFromAlternativeScreen()
+{
+#ifdef _env_linux
+    system("tput rmcup");
+#elif _env_windows
+#endif
+}
+
+#ifdef _env_windows
+CONSOLE_SCREEN_BUFFER_INFO sys_call_namesp::getConsoleScreenBufferInfo()
+{
+    CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screen_buffer_info);
+    return screen_buffer_info;
 }
 #endif

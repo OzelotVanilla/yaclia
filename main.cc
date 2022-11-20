@@ -11,11 +11,9 @@ int main(int argc, char const* argv[])
 
     //  Main Process
     // view_manager.run();
-    for (size_t i = 0; i < 20; i++)
-    {
-        moveCursorTo(i, i);
-        putchar('.');
-    }
+
+    char buffer[64];
+
 
 
     view_manager.end();
@@ -23,6 +21,7 @@ int main(int argc, char const* argv[])
 }
 
 
+#ifdef _env_linux
 void registerAllSignalHandler()
 {
     registerSignalHandler(UnixSignal::interrupt, onInterrupt);
@@ -33,3 +32,8 @@ void onInterrupt(int sig)
 {
     view_manager.handleInterrupt();
 }
+#elif _env_windows
+void registerAllSignalHandler()
+{
+}
+#endif

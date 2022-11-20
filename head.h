@@ -17,6 +17,7 @@
 #include <random>
 #include <time.h>
 
+
 // Macro flags for system
 #ifdef __linux__
 #define _env_linux 1
@@ -24,6 +25,8 @@
 #define _env_windows 1
 #endif
 
+
+#ifdef _env_linux
 namespace ncurses
 {
 #include <curses.h>
@@ -36,9 +39,15 @@ namespace stdio
 #ifdef stdin
 #undef stdin
 #endif
-const FILE* stdin = stdin;
+static FILE* stdin = stdin;
 } // namespace stdio
-using stdio::stdin;
+#elif _env_windows
+#include <windows.h>
+#ifdef stdin
+#undef stdin
+#endif
+#endif
+
 
 
 using std::cin;
@@ -51,8 +60,12 @@ using std::vector;
 using std::array;
 using std::list;
 
+// Conflict with windows, not used here
+#ifdef _env_linux
 typedef int8_t byte;
-typedef char   uchar;
+#endif
+
+typedef char uchar;
 
 #define lambda(...) [](__VA_ARGS__)
 #define lambda_ref(...) [&](__VA_ARGS__)

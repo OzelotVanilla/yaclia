@@ -4,7 +4,7 @@
 #include "../container/Screen.h"
 #include "../../util/terminal.h"
 #include "../../system/sys_call.h"
-#include "../../util/ncurses_key.h"
+#include "../../util/key_input.h"
 
 #ifdef constructor
 #undef constructor
@@ -33,8 +33,6 @@ class ViewManager
     ViewManager& pushScreen(Screen* s);
     ViewManager& popScreen();
 
-    ViewManager& handleInput(ProcessedKeyInput data);
-
   public:
     void handleInterrupt();
 
@@ -46,6 +44,9 @@ class ViewManager
     void checkAndUpdateConsoleInfo();
 
     void handleSignal();
+
+    ViewManager& processInput();
+    ViewManager& handleInput(ProcessedKeyInput data);
 
   private:
     vector<Screen*>* screens;

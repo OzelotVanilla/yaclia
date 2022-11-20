@@ -9,6 +9,9 @@
 
 #define constructor ConsoleConfig
 
+#ifdef _env_linux
+#elif _env_windows
+#endif
 
 class ConsoleConfig
 {

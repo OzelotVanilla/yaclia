@@ -3,12 +3,15 @@ project("yaclia")
 cmake_minimum_required(VERSION 3.22)
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
+if (UNIX)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+endif (UNIX)
 enable_testing()
 
 # Find `curses` and `ncurses`
-find_package(Curses REQUIRED)
-set (CURSES_USE_NCURSES TRUE)
+#TODO Get out of `ncurses`
+# find_package(Curses REQUIRED)
+# set (CURSES_USE_NCURSES TRUE)
 
 # Compile options
 add_compile_options(-enable-pretty-printing)

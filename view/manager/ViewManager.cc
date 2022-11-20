@@ -6,34 +6,7 @@ ViewManager& ViewManager::run()
 {
     while (this->main_process_can_run)
     {
-        // Get input
-        let first_input = ncurses::wgetch(ncurses::stdscr);
-        let input_data  = ProcessedKeyInput();
-        // If need to check whether `alt` or `esc`
-        if (first_input == int(NcursesKey::alt_or_esc))
-        {
-            // If `ESC` is pressed, then there will be no secondary input
-            let second_input = ncurses::wgetch(ncurses::stdscr);
-            if (second_input == -1) // That means this is a esc
-            {
-                ncurses::ungetch(second_input);
-                input_data.key      = '\033';
-                input_data.modifier = ProcessedKeyInput::Modifier::none;
-            }
-            else // That means an alt
-            {
-                input_data.key      = second_input;
-                input_data.modifier = ProcessedKeyInput::Modifier::alt;
-            }
-        }
-        else // Not `alt` or `esc`
-        {
-            input_data.key = first_input;
-        }
-
-        // Send input to screen, and it may also send to active window
-
-
+        view_manager.processInput();
         view_manager.draw();
     }
 
@@ -77,11 +50,7 @@ ViewManager& ViewManager::popScreen()
 
 ViewManager& ViewManager::start()
 {
-    // system("tput smcup");
-    // ncurses::initscr();
-    // ncurses::keypad(ncurses::stdscr, true);
-    // ncurses::wtimeout(ncurses::stdscr, 0); // Input should not be blocked (?)
-
+    changeToAlternativeScreen();
     // Make the current console non-blocking and non-echo-input
     setCurrentConsoleNonBlocking();
     return *this;
@@ -90,10 +59,22 @@ ViewManager& ViewManager::start()
 
 ViewManager& ViewManager::end()
 {
-    // ncurses::clear();
-    // ncurses::endwin();
-    setCurrentConsoleDefault();
-    // system("tput rmcup");
+    setCurrentConsoleDefaultState();
+    backFromAlternativeScreen();
+    return *this;
+}
+
+
+ViewManager& ViewManager::processInput()
+{
+    ProcessedKeyInput input_data;
+
+    // Get input (at this time, console should be non-blocking and non-echo-input)
+    bool is_read_valid = getConsoleInput(input_data);
+
+    // Send input to screen, and it may also send to active window
+    if (is_read_valid) { this->handleInput(input_data); }
+
     return *this;
 }
 
