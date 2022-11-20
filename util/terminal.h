@@ -23,4 +23,7 @@ inline void resetTerminalToDefault();
 /**
  * Clean the whole screen.
  */
-inline void clearTerminal();
+inline void clearTerminal()
+{
+    printf("%s", "\033[3J");
+}

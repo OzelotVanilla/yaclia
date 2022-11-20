@@ -6,6 +6,10 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 enable_testing()
 
+# Find `curses` and `ncurses`
+find_package(Curses REQUIRED)
+set (CURSES_USE_NCURSES TRUE)
+
 # Compile options
 add_compile_options(-enable-pretty-printing)
 
@@ -23,3 +27,6 @@ set(StandardYacliaOption ${SystemDir} ${Util} ${View})
 
 # Final excutables
 add_executable(yaclia head.h ${StandardYacliaOption} main.h main.cc)
+
+# Link to `ncurses`
+target_link_libraries(yaclia ${CURSES_LIBRARIES})

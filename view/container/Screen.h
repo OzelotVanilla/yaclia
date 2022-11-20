@@ -5,7 +5,6 @@
 #include "ConsoleConfig.h"
 #include "ViewContainer.h"
 #include "Window.h"
-#include <ncurses.h>
 
 #ifdef constructor
 #undef constructor

@@ -17,6 +17,12 @@
 #include <random>
 #include <time.h>
 
+namespace ncurses
+{
+#include <curses.h>
+#include <ncurses.h>
+} // namespace ncurses
+
 using std::cin;
 using std::cout;
 using std::endl;

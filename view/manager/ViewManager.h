@@ -2,6 +2,9 @@
 
 #include "../../head.h"
 #include "../container/Screen.h"
+#include "../../util/terminal.h"
+#include "../../system/sys_call.h"
+#include "../../util/ncurses_key.h"
 
 #ifdef constructor
 #undef constructor
@@ -16,13 +19,24 @@
 class ViewManager
 {
   public:
+    /**
+     * @brief Start main loop and run yaclia.
+     *
+     */
+    ViewManager& run();
+
     ViewManager& draw();
+
+    ViewManager& start() noexcept(false);
+    ViewManager& end();
 
     ViewManager& pushScreen(Screen* s);
     ViewManager& popScreen();
 
-    ViewManager& start() noexcept(false);
-    ViewManager& end();
+    ViewManager& handleInput(ProcessedKeyInput data);
+
+  public:
+    void handleInterrupt();
 
   private:
     /**
@@ -36,10 +50,17 @@ class ViewManager
   private:
     vector<Screen*>* screens;
 
+    Screen* top_screen;
+
     bool should_run = true;
+
+    bool need_to_draw = true;
+
+    bool main_process_can_run = true;
 
   public:
     constructor();
+    destructor();
 };
 
 static ViewManager view_manager = ViewManager();

@@ -41,8 +41,6 @@ void sys_call_namesp::unregisterSignalHandler(UnixSignal sig)
 
 string sys_call_namesp::getANSIResponse(string command, char ending_sign)
 {
-    setCurrentConsoleNonBlocking();
-
     printf("%s", command.c_str());
 
     char result_arr[20];
@@ -54,8 +52,6 @@ string sys_call_namesp::getANSIResponse(string command, char ending_sign)
         if (c == ending_sign) { break; }
     }
     result_arr[i] = '\0';
-
-    setCurrentConsoleDefault();
 
     return string(result_arr);
 }

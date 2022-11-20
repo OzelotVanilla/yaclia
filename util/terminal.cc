@@ -14,7 +14,8 @@ void moveCursorTo(int from_left, int from_top)
     for (; buffer[index] != '\000'; index++) { }
     buffer[index++] = ';';
     snprintf(&buffer[index], 20, "%d", ++from_left);
-    buffer[++index] = 'H';
+    for (; buffer[index] != '\000'; index++) { }
+    buffer[index] = 'H';
 
     printf("%s", buffer);
 }
@@ -42,10 +43,4 @@ CursorPosition getCursorPosition()
 void resetTerminalToDefault()
 {
     printf("%s", "\033c");
-}
-
-
-void clearTerminal()
-{
-    printf("%s", "\033[3J");
 }

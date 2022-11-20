@@ -4,22 +4,18 @@ bool main_process_can_run = true;
 
 int main(int argc, char const* argv[])
 {
-    // Create main screen
-    let main_screen = new Screen();
-    main_screen->setBackgroundChar('.');
-    view_manager.pushScreen(main_screen);
-    view_manager.start();
-
     registerAllSignalHandler();
 
+    // Start view manager
+    view_manager.start();
+
     //  Main Process
-    // while (main_process_can_run)
-    // {
-    //     view_manager.draw();
-    // }
-    let pos = getCursorPosition();
-    moveCursorTo(5, 5);
-    input("Input here: ");
+    // view_manager.run();
+    for (size_t i = 0; i < 20; i++)
+    {
+        moveCursorTo(i, i);
+        putchar('.');
+    }
 
 
     view_manager.end();
@@ -35,6 +31,5 @@ void registerAllSignalHandler()
 
 void onInterrupt(int sig)
 {
-    main_process_can_run = false;
-    view_manager.end();
+    view_manager.handleInterrupt();
 }

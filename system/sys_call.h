@@ -67,6 +67,10 @@ void unregisterSignalHandler(UnixSignal sig);
 string getANSIResponse(string command, char ending_sign);
 
 
+/**
+ * @brief Set the current console to
+ *
+ */
 void setCurrentConsoleNonBlocking();
 
 
@@ -85,3 +89,5 @@ using sys_call_namesp::getShellOutput;
 using sys_call_namesp::registerSignalHandler;
 using sys_call_namesp::unregisterSignalHandler;
 using sys_call_namesp::getANSIResponse;
+using sys_call_namesp::setCurrentConsoleNonBlocking;
+using sys_call_namesp::setCurrentConsoleDefault;

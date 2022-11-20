@@ -8,12 +8,9 @@ void Screen::draw()
     {
         this->updateCharView();
         this->need_to_update_char_view = false;
-        this->need_to_draw             = true;
-    }
 
-    // Draw the background, if the screen itself is changed
-    if (this->need_to_draw)
-    {
+        // Draw the background, if the screen itself is changed
+
         const let from_left = this->draw_info.position_from_left;
         const let from_top  = this->draw_info.position_from_top;
         const let size_vert = this->draw_info.size_vertical;
@@ -21,7 +18,8 @@ void Screen::draw()
         for (size_t line_index = 0; line_index < size_vert; line_index++)
         {
             moveCursorTo(from_left, from_top + line_index);
-            cout << this->draw_info.char_view[line_index];
+            // printf("%s", this->draw_info.char_view[line_index].c_str());
+            printf("%s", this->draw_info.char_view[line_index].c_str());
         }
     }
 
