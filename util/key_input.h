@@ -40,6 +40,8 @@ static INPUT_RECORD buffer[8];
 static DWORD        num_readed;
 #endif
 
+// If using local console
+bool checkAndStoreIfConsoleLocal();
 #ifdef _env_linux
 #elif _env_windows
 #endif

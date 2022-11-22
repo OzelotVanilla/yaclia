@@ -19,6 +19,8 @@ namespace sys_call_namesp
 /* Console related files' include*/;
 #ifdef _env_linux
 #include <termios.h>
+#include <sys/ioctl.h>
+#include <linux/kd.h>
 #elif _env_windows
 // #include <windows.h>
 #endif

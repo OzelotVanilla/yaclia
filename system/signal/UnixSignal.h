@@ -7,7 +7,6 @@ namespace signal_unix_namesp
 {
 
 #include <signal.h>
-#include <stdlib.h>
 
 
 enum class UnixSignal

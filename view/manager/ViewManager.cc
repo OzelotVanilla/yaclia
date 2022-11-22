@@ -53,6 +53,7 @@ ViewManager& ViewManager::start()
     changeToAlternativeScreen();
     // Make the current console non-blocking and non-echo-input
     setCurrentConsoleNonBlocking();
+
     return *this;
 }
 

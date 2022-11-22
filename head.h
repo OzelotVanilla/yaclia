@@ -11,6 +11,7 @@
 #include <queue>
 #include <vector>
 #include <list>
+#include <bitset>
 
 #include <cmath>
 #include <functional>
@@ -26,13 +27,9 @@
 #endif
 
 
+// IO-related functions
 #ifdef _env_linux
-namespace ncurses
-{
-#include <curses.h>
-#include <ncurses.h>
-} // namespace ncurses
-
+// In Linux, it is under stdio namespace
 namespace stdio
 {
 #include <stdio.h>
@@ -40,14 +37,23 @@ namespace stdio
 #undef stdin
 #endif
 static FILE* stdin = stdin;
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 } // namespace stdio
 #elif _env_windows
+// In Windows, due to too many macro define, currently not in namespace
 #include <windows.h>
 #ifdef stdin
 #undef stdin
 #endif
 #endif
 
+namespace std
+{
+#include <stdlib.h>
+#include <cstdlib>
+} // namespace std
 
 
 using std::cin;
@@ -101,6 +107,11 @@ inline int parseInt(string s, int radix)
 inline string parseString(int num)
 {
     return std::to_string(num);
+}
+
+inline string parseBinString(int num)
+{
+    return std::bitset<2 << sizeof(int)>(num).to_string();
 }
 
 inline string input()
