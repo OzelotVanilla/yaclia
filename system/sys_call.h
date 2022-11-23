@@ -89,7 +89,7 @@ void registerSignalHandler(WindowsSignal sig, SignalHandlerFunc f);
  *
  * @param sig Signal to unregister handle
  */
-void                       unregisterSignalHandler(WindowsSignal sig);
+void unregisterSignalHandler(WindowsSignal sig);
 
 #endif // End of signal processing
 
@@ -109,18 +109,25 @@ string getANSIResponse(string command, char ending_sign);
  * @brief Set the current console to
  *
  */
-void setCurrentConsoleNonBlocking();
+void prepareConsole();
 
 
-void setCurrentConsoleDefaultState();
+void restoreConsole();
 
 #ifdef _env_linux
 termios getDefaultConsoleState();
+int     getDefaultKeyboardState();
 #elif _env_windows
-DWORD                      getDefaultConsoleState();
+/**
+ *
+ */
+DWORD getDefaultConsoleState();
+
+
 #endif
 
-static let default_console_state = getDefaultConsoleState();
+static let default_console_state  = getDefaultConsoleState();
+static let default_keyboard_state = getDefaultKeyboardState();
 
 // Alternative Screen Related
 
@@ -128,8 +135,15 @@ void changeToAlternativeScreen();
 void backFromAlternativeScreen();
 #ifdef _env_linux
 #elif _env_windows
+/**
+ *
+ */
 CONSOLE_SCREEN_BUFFER_INFO getConsoleScreenBufferInfo();
-static let                 previous_screen_buffer = getConsoleScreenBufferInfo();
+
+/**
+ *
+ */
+static let previous_screen_buffer = getConsoleScreenBufferInfo();
 #endif
 
 } // namespace sys_call_namesp
@@ -139,7 +153,7 @@ using sys_call_namesp::getShellOutput;
 using sys_call_namesp::registerSignalHandler;
 using sys_call_namesp::unregisterSignalHandler;
 using sys_call_namesp::getANSIResponse;
-using sys_call_namesp::setCurrentConsoleNonBlocking;
-using sys_call_namesp::setCurrentConsoleDefaultState;
+using sys_call_namesp::prepareConsole;
+using sys_call_namesp::restoreConsole;
 using sys_call_namesp::changeToAlternativeScreen;
 using sys_call_namesp::backFromAlternativeScreen;

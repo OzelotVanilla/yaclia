@@ -52,7 +52,7 @@ ViewManager& ViewManager::start()
 {
     changeToAlternativeScreen();
     // Make the current console non-blocking and non-echo-input
-    setCurrentConsoleNonBlocking();
+    prepareConsole();
 
     return *this;
 }
@@ -60,7 +60,7 @@ ViewManager& ViewManager::start()
 
 ViewManager& ViewManager::end()
 {
-    setCurrentConsoleDefaultState();
+    restoreConsole();
     backFromAlternativeScreen();
     return *this;
 }

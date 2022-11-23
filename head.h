@@ -26,6 +26,12 @@
 #define _env_windows 1
 #endif
 
+// Fix for missing types
+#ifdef _env_linux
+// Arm signal.h need this to understand type like `__u64`
+#include <bits/types.h>
+#include <linux/types.h>
+#endif
 
 // IO-related functions
 #ifdef _env_linux
@@ -36,10 +42,11 @@ namespace stdio
 #ifdef stdin
 #undef stdin
 #endif
-static FILE* stdin = stdin;
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+static FILE* stdin    = stdin;
+static int   stdin_fd = STDIN_FILENO;
 } // namespace stdio
 #elif _env_windows
 // In Windows, due to too many macro define, currently not in namespace

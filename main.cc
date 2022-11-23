@@ -12,7 +12,7 @@ int main(int argc, char const* argv[])
     //  Main Process
     // view_manager.run();
 
-    char buffer[64];
+    char buffer[6];
     int  stdin_fd = stdio::open("/dev/stdin", O_RDONLY);
 
     int                      previous_kbd_mode;
@@ -28,17 +28,6 @@ int main(int argc, char const* argv[])
     sys_call_namesp::tcsetattr(stdin_fd, TCSANOW, &current_console_setting);
     sys_call_namesp::ioctl(stdin_fd, KDGKBMODE, &previous_kbd_mode);
     sys_call_namesp::ioctl(stdin_fd, KDSKBMODE, K_RAW);
-
-    // Check if it is local, or non-local
-    //  Key is: if it can get medium_raw
-    //  SSH_TTY, SSH_CONNECTION, or SSH_CLIENT
-    bool if_ssh = std::getenv("SSH_CLIENT") == nullptr
-                  or std::getenv("SSH_TTY") == nullptr
-                  or std::getenv("SSH_CONNECTION") == nullptr;
-
-    struct stdio::stat input_device_info;
-    bool               is_input_existed = stdio::stat("/dev/input/", &input_device_info) == 0;
-
 
     bool can_run = true;
     while (can_run)
@@ -65,7 +54,6 @@ int main(int argc, char const* argv[])
     // Restore
     sys_call_namesp::tcsetattr(STDIN_FILENO, TCSANOW, &previous_console_setting);
     sys_call_namesp::ioctl(STDIN_FILENO, KDSKBMODE, &previous_kbd_mode);
-
 
 
     // view_manager.end();
