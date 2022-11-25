@@ -6,11 +6,13 @@
 #include "../../system/sys_call.h"
 #include "../../util/key_input.h"
 
+
 #ifdef constructor
 #undef constructor
 #endif
 
 #define constructor ViewManager
+
 
 
 // There exist a static member.
@@ -49,7 +51,7 @@ class ViewManager
     ViewManager& handleInput(ProcessedKeyInput data);
 
   private:
-    vector<Screen*>* screens;
+    vector<Screen*>* screens = nullptr;
 
     Screen* top_screen;
 
@@ -58,6 +60,8 @@ class ViewManager
     bool need_to_draw = true;
 
     bool main_process_can_run = true;
+
+    KeyInputBuffer* key_input_buffer = nullptr;
 
   public:
     constructor();

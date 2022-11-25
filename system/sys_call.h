@@ -10,9 +10,6 @@
 namespace sys_call_namesp
 {
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "../util/string_process.h"
 
 
@@ -146,6 +143,14 @@ CONSOLE_SCREEN_BUFFER_INFO getConsoleScreenBufferInfo();
 static let previous_screen_buffer = getConsoleScreenBufferInfo();
 #endif
 
+
+// Print related
+
+inline void flushOutputToConsole()
+{
+    fflush(stdio::stdout);
+}
+
 } // namespace sys_call_namesp
 
 using sys_call_namesp::getFromStream;
@@ -157,3 +162,4 @@ using sys_call_namesp::prepareConsole;
 using sys_call_namesp::restoreConsole;
 using sys_call_namesp::changeToAlternativeScreen;
 using sys_call_namesp::backFromAlternativeScreen;
+using sys_call_namesp::flushOutputToConsole;

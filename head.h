@@ -42,11 +42,16 @@ namespace stdio
 #ifdef stdin
 #undef stdin
 #endif
+#ifdef stdout
+#undef stdout
+#endif
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-static FILE* stdin    = stdin;
-static int   stdin_fd = STDIN_FILENO;
+static FILE* stdin     = stdin;
+static int   stdin_fd  = STDIN_FILENO;
+static FILE* stdout    = stdout;
+static int   stdout_fd = STDOUT_FILENO;
 } // namespace stdio
 #elif _env_windows
 // In Windows, due to too many macro define, currently not in namespace

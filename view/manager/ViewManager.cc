@@ -27,6 +27,9 @@ ViewManager& ViewManager::draw()
         top_screen->draw();
     }
 
+    // Force console to show, do not be lazy.
+    flushOutputToConsole();
+
     return *this;
 }
 
@@ -68,13 +71,16 @@ ViewManager& ViewManager::end()
 
 ViewManager& ViewManager::processInput()
 {
-    ProcessedKeyInput input_data;
-
     // Get input (at this time, console should be non-blocking and non-echo-input)
-    bool is_read_valid = getConsoleInput(input_data);
+    getAndWriteConsoleInput(*this->key_input_buffer);
 
     // Send input to screen, and it may also send to active window
-    if (is_read_valid) { this->handleInput(input_data); }
+    if (not this->key_input_buffer->empty())
+    {
+        this->handleInput(this->key_input_buffer->front());
+        this->key_input_buffer->pop();
+    }
+
 
     return *this;
 }
@@ -110,6 +116,8 @@ ViewManager::constructor()
     this->screens = new vector<Screen*>();
     // Push a default screen in
     this->pushScreen(new Screen());
+
+    this->key_input_buffer = new KeyInputBuffer();
 }
 
 

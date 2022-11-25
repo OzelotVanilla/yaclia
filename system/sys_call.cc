@@ -64,7 +64,7 @@ void sys_call_namesp::prepareConsole()
 {
     // Idea from: https://stackoverflow.com/questions/46142246/getchar-with-non-canonical-mode-on-unix-and-windows
 #ifdef _env_linux
-    // Set the console
+    // Set the console.
     termios current_console_setting;
     tcgetattr(0, &current_console_setting);
     current_console_setting.c_iflag &= ~(IXON | ICRNL);
@@ -73,8 +73,11 @@ void sys_call_namesp::prepareConsole()
     current_console_setting.c_cc[VTIME] = 1;
     tcsetattr(0, TCSANOW, &current_console_setting);
 
-    // Set keyboard
+    // Set keyboard.
     ioctl(stdio::stdin_fd, KDSKBMODE, K_MEDIUMRAW);
+
+    // Set non-buffering output.
+    setvbuf(stdout, nullptr, _IONBF, (size_t)0);
 #elif _env_windows
     DWORD  current_console_mode;
     HANDLE current_console = GetStdHandle(STD_INPUT_HANDLE);

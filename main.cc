@@ -29,24 +29,48 @@ int main(int argc, char const* argv[])
     sys_call_namesp::ioctl(stdin_fd, KDGKBMODE, &previous_kbd_mode);
     sys_call_namesp::ioctl(stdin_fd, KDSKBMODE, K_RAW);
 
-    bool can_run = true;
+    bool      can_run       = true;
+    const let terminate_key = ProcessedKeyInput(KbdChar::q, KbdModifier::none);
     while (can_run)
     {
-        let length_readed = stdio::read(stdin_fd, buffer, sizeof(buffer));
-        for (size_t i = 0; i < length_readed; i++)
-        {
-            let keycode          = (buffer[i] & 0x7f);
-            let press_or_release = (buffer[i] & 0x80); // true: press, false: release
-            printf("%3d %s", keycode, press_or_release ? "press" : "release");
-            printf(" with code %s\r\n", parseBinString(buffer[i]).c_str());
+        // for (size_t i = 0; i < 6; i++) { buffer[i] = '\0'; }
 
-            if (keycode == 'q')
+        // let length_readed = stdio::read(stdin_fd, buffer, sizeof(buffer));
+        // for (size_t i = 0; i < length_readed; i++)
+        // {
+        //     let keycode          = (buffer[i] & 0x7f);
+        //     let press_or_release = (buffer[i] & 0x80); // true: press, false: release
+        //     printf("%3d %s", keycode, press_or_release ? "press" : "release");
+        //     printf(" with code %s\r\n", parseBinString(buffer[i]).c_str());
+        //     if (keycode == 'q')
+        //     {
+        //         printf("%s\n", "Should terminate when 'q' pressed.");
+        //         can_run = false;
+        //     }
+        // }
+        // if (length_readed != 0)
+        // {
+        //     if (buffer[0] == 27) { buffer[0] = '^'; }
+        //     printf("Represent: %s\r\n", buffer);
+        //     printf("----\r\n");
+        // }
+
+        KeyInputBuffer buffer;
+        bool           is_success = getAndWriteConsoleInput(buffer);
+        if (not buffer.empty())
+        {
+            ProcessedKeyInput key_input = buffer.front();
+            printf("%s\r\n", str(key_input).c_str());
+            buffer.pop();
+
+            if (key_input == terminate_key)
             {
-                printf("%s\n", "Should terminate when 'q' pressed.");
+                printf("%s\r\n", "Should terminate when 'q' pressed.");
                 can_run = false;
             }
+
+            printf("----\r\n");
         }
-        if (length_readed != 0) { printf("----\r\n"); }
     }
 
 
