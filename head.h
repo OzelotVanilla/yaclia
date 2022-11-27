@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ciso646> // VS need this to recognize alternative operator
 #include <exception>
 #include <iomanip>
@@ -39,18 +40,18 @@
 namespace stdio
 {
 #include <stdio.h>
-#ifdef stdin
-#undef stdin
-#endif
-#ifdef stdout
-#undef stdout
-#endif
+// #ifdef stdin
+// #undef stdin
+// #endif
+// #ifdef stdout
+// #undef stdout
+// #endif
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 static FILE* stdin     = stdin;
 static int   stdin_fd  = STDIN_FILENO;
-static FILE* stdout    = stdout;
+static FILE* stdout    = fopen("/dev/stdout", "rw");
 static int   stdout_fd = STDOUT_FILENO;
 } // namespace stdio
 #elif _env_windows
@@ -67,6 +68,9 @@ namespace std
 #include <cstdlib>
 } // namespace std
 
+#ifdef _env_linux
+#include <stdarg.h>
+#endif
 
 using std::cin;
 using std::cout;

@@ -1,32 +1,6 @@
 #include "terminal.h"
 
 
-void moveCursorTo(int from_left, int from_top)
-{
-    char buffer[20];
-    buffer[0]    = '\033';
-    buffer[1]    = '[';
-    size_t index = 2;
-
-    // Manually converting to raise speed
-    // Index value need to plus one to fit ANSI escape sequence
-    snprintf(&buffer[index], 20, "%d", ++from_top);
-    for (; buffer[index] != '\000'; index++) { }
-    buffer[index++] = ';';
-    snprintf(&buffer[index], 20, "%d", ++from_left);
-    for (; buffer[index] != '\000'; index++) { }
-    buffer[index] = 'H';
-
-    printf("%s", buffer);
-}
-
-
-void moveCursorTo(CursorPosition pos)
-{
-    return moveCursorTo(pos.position_from_left, pos.position_from_top);
-}
-
-
 CursorPosition getCursorPosition()
 {
     int from_left, from_top;
@@ -40,7 +14,33 @@ CursorPosition getCursorPosition()
 }
 
 
-void resetTerminalToDefault()
+void moveCursorTo(int from_left, int from_top)
 {
-    printf("%s", "\033c");
+    char buffer[20];
+    buffer[0]    = '\033';
+    buffer[1]    = '[';
+    size_t index = 2;
+
+    // Manually converting to raise speed
+    // Index value need to plus one to fit ANSI escape sequence
+    sprintf(&buffer[index], "%d", ++from_top);
+    for (; buffer[index] != '\0'; index++) { }
+    buffer[index++] = ';';
+    sprintf(&buffer[index], "%d", ++from_left);
+    for (; buffer[index] != '\0'; index++) { }
+    buffer[index] = 'H';
+
+    writeStdout(buffer);
+}
+
+
+ConsoleStatus terminal_namesp::updateConsoleStatusInfo()
+{
+    sys_call_namesp::winsize current_console_size;
+    sys_call_namesp::ioctl(stdio::stdout_fd, TIOCGWINSZ, &current_console_size);
+    ConsoleStatus latest;
+    latest.height = current_console_size.ws_row;
+    latest.width  = current_console_size.ws_col;
+
+    return terminal_namesp::current_console_status = latest;
 }

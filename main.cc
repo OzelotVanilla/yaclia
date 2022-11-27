@@ -7,80 +7,39 @@ int main(int argc, char const* argv[])
     registerAllSignalHandler();
 
     // Start view manager
-    // view_manager.start();
+    view_manager.start();
 
     //  Main Process
-    // view_manager.run();
+    view_manager.run();
 
-    char buffer[6];
-    int  stdin_fd = stdio::open("/dev/stdin", O_RDONLY);
+    // char buffer[6];
 
-    int                      previous_kbd_mode;
-    sys_call_namesp::termios previous_console_setting, current_console_setting;
-    sys_call_namesp::tcgetattr(stdin_fd, &current_console_setting);
-    previous_console_setting = current_console_setting;
-    current_console_setting.c_iflag &= ~(IXON | ICRNL);
-    current_console_setting.c_lflag &= ~(ICANON | ECHO | IEXTEN | ISIG);
-    // This will help differentiate `esc` and `alt`.
-    // When `alt` + `key`, `read` function get two, not one.
-    current_console_setting.c_cc[VMIN]  = 0;
-    current_console_setting.c_cc[VTIME] = 1;
-    sys_call_namesp::tcsetattr(stdin_fd, TCSANOW, &current_console_setting);
-    sys_call_namesp::ioctl(stdin_fd, KDGKBMODE, &previous_kbd_mode);
-    sys_call_namesp::ioctl(stdin_fd, KDSKBMODE, K_RAW);
+    // bool      can_run       = true;
+    // const let terminate_key = ProcessedKeyInput(KbdChar::q, KbdModifier::none);
+    // while (can_run)
+    // {
+    //     KeyInputBuffer buffer;
+    //     bool           is_success = getAndWriteConsoleInput(buffer);
+    //     if (not buffer.empty())
+    //     {
+    //         ProcessedKeyInput key_input = buffer.front();
+    //         printf("%s\r\n", str(key_input).c_str());
+    //         buffer.pop();
 
-    bool      can_run       = true;
-    const let terminate_key = ProcessedKeyInput(KbdChar::q, KbdModifier::none);
-    while (can_run)
-    {
-        // for (size_t i = 0; i < 6; i++) { buffer[i] = '\0'; }
+    //         if (key_input == terminate_key)
+    //         {
+    //             printf("%s\r\n", "Should terminate when 'q' pressed.");
+    //             can_run = false;
+    //         }
 
-        // let length_readed = stdio::read(stdin_fd, buffer, sizeof(buffer));
-        // for (size_t i = 0; i < length_readed; i++)
-        // {
-        //     let keycode          = (buffer[i] & 0x7f);
-        //     let press_or_release = (buffer[i] & 0x80); // true: press, false: release
-        //     printf("%3d %s", keycode, press_or_release ? "press" : "release");
-        //     printf(" with code %s\r\n", parseBinString(buffer[i]).c_str());
-        //     if (keycode == 'q')
-        //     {
-        //         printf("%s\n", "Should terminate when 'q' pressed.");
-        //         can_run = false;
-        //     }
-        // }
-        // if (length_readed != 0)
-        // {
-        //     if (buffer[0] == 27) { buffer[0] = '^'; }
-        //     printf("Represent: %s\r\n", buffer);
-        //     printf("----\r\n");
-        // }
-
-        KeyInputBuffer buffer;
-        bool           is_success = getAndWriteConsoleInput(buffer);
-        if (not buffer.empty())
-        {
-            ProcessedKeyInput key_input = buffer.front();
-            printf("%s\r\n", str(key_input).c_str());
-            buffer.pop();
-
-            if (key_input == terminate_key)
-            {
-                printf("%s\r\n", "Should terminate when 'q' pressed.");
-                can_run = false;
-            }
-
-            printf("----\r\n");
-        }
-    }
+    //         printf("----\r\n");
+    //     }
+    // }
 
 
 
     // Restore
-    sys_call_namesp::tcsetattr(STDIN_FILENO, TCSANOW, &previous_console_setting);
-    sys_call_namesp::ioctl(STDIN_FILENO, KDSKBMODE, &previous_kbd_mode);
-
-
-    // view_manager.end();
+    view_manager.end();
     return 0;
 }
 

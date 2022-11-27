@@ -2,7 +2,6 @@
 
 #include "../../head.h"
 #include "../../system/signal/signal.h"
-#include "ConsoleConfig.h"
 #include "ViewDrawInfo.h"
 
 #ifdef constructor
@@ -41,11 +40,6 @@
      * The info about position that is used to draw.
      */
     ViewDrawInfo draw_info;
-
-    /**
-     * A shared config of current console.
-     */
-    ConsoleConfig* console_config;
 
     bool need_to_draw; // TODO What is the meaning of this ?
 

@@ -99,7 +99,7 @@ void unregisterSignalHandler(WindowsSignal sig);
  * @param ending_sign The end sign for response.
  * @return Response typed string.
  */
-string getANSIResponse(string command, char ending_sign);
+string getANSIResponse(const string& command, const char& ending_sign);
 
 
 /**
@@ -146,6 +146,50 @@ static let previous_screen_buffer = getConsoleScreenBufferInfo();
 
 // Print related
 
+static char print_stdout_buffer[1024];
+
+
+/**
+ * @brief A non-buffer print to stdout
+ *
+ * @param format_str Format string for output. Same as `printf` family.
+ * @param ...
+ */
+inline void printStdout(const char* format_str, ...)
+{
+    va_list args;
+
+    va_start(args, format_str);
+    vsprintf(print_stdout_buffer, format_str, args);
+    stdio::write(stdio::stdout_fd, print_stdout_buffer, sizeof(print_stdout_buffer));
+    // stdio::write(stdio::stdout_fd, print_stdout_buffer, sizeof(print_stdout_buffer));
+    va_end(args);
+}
+
+
+inline void printStdout(const string& format_str, ...)
+{
+    va_list args;
+
+    va_start(args, format_str);
+    vsprintf(print_stdout_buffer, format_str.c_str(), args);
+    stdio::write(stdio::stdout_fd, print_stdout_buffer, sizeof(print_stdout_buffer));
+    va_end(args);
+}
+
+
+inline void writeStdout(const char* str)
+{
+    stdio::write(stdio::stdout_fd, str, sizeof(str));
+}
+
+
+inline void writeStdout(const string& str)
+{
+    stdio::write(stdio::stdout_fd, str.c_str(), sizeof(str));
+}
+
+
 inline void flushOutputToConsole()
 {
     fflush(stdio::stdout);
@@ -162,4 +206,6 @@ using sys_call_namesp::prepareConsole;
 using sys_call_namesp::restoreConsole;
 using sys_call_namesp::changeToAlternativeScreen;
 using sys_call_namesp::backFromAlternativeScreen;
+using sys_call_namesp::printStdout;
+using sys_call_namesp::writeStdout;
 using sys_call_namesp::flushOutputToConsole;

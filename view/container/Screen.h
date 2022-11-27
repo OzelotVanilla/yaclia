@@ -2,7 +2,6 @@
 
 #include "../../head.h"
 #include "../../util/terminal.h"
-#include "ConsoleConfig.h"
 #include "ViewContainer.h"
 #include "Window.h"
 
@@ -11,7 +10,6 @@
 #endif
 
 #define constructor Screen
-
 
 
 /**
@@ -47,5 +45,4 @@ class Screen : public ViewContainer
 
   public:
     constructor();
-    constructor(ConsoleConfig c);
 };

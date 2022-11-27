@@ -6,12 +6,14 @@ ViewManager& ViewManager::run()
 {
     while (this->main_process_can_run)
     {
+        terminal_namesp::updateConsoleStatusInfo();
         view_manager.processInput();
         view_manager.draw();
     }
 
     return *this;
 }
+
 
 ViewManager& ViewManager::draw()
 {
@@ -27,12 +29,11 @@ ViewManager& ViewManager::draw()
         top_screen->draw();
     }
 
-    // Force console to show, do not be lazy.
+    // If use printf, force console to show, do not be lazy.
     flushOutputToConsole();
 
     return *this;
 }
-
 
 
 ViewManager& ViewManager::pushScreen(Screen* s)
@@ -55,7 +56,9 @@ ViewManager& ViewManager::start()
 {
     changeToAlternativeScreen();
     // Make the current console non-blocking and non-echo-input
+    printf("Stdout is %s\r\n", parseString(size_t(stdio::stdout)).c_str());
     prepareConsole();
+    moveCursorTo(0, 0);
 
     return *this;
 }
@@ -88,11 +91,12 @@ ViewManager& ViewManager::processInput()
 
 ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 {
-    // If this is directly affecting view manager
+    // If this is directly affecting view manager.
+
+    // Else, send it to active screen.
 
     return *this;
 }
-
 
 
 void ViewManager::handleInterrupt()

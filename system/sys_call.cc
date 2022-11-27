@@ -42,7 +42,7 @@ void sys_call_namesp::unregisterSignalHandler(UnixSignal sig)
 #endif
 
 
-string sys_call_namesp::getANSIResponse(string command, char ending_sign)
+string sys_call_namesp::getANSIResponse(const string& command, const char& ending_sign)
 {
     printf("%s", command.c_str());
 
@@ -64,20 +64,22 @@ void sys_call_namesp::prepareConsole()
 {
     // Idea from: https://stackoverflow.com/questions/46142246/getchar-with-non-canonical-mode-on-unix-and-windows
 #ifdef _env_linux
+    // Set non-buffering output. What you write to stdout will immediately appear.
+    setvbuf(stdio::stdout, nullptr, _IONBF, 0);
+
     // Set the console.
     termios current_console_setting;
-    tcgetattr(0, &current_console_setting);
+    tcgetattr(stdio::stdin_fd, &current_console_setting);
     current_console_setting.c_iflag &= ~(IXON | ICRNL);
     current_console_setting.c_lflag &= ~(ICANON | ECHO | IEXTEN | ISIG);
     current_console_setting.c_cc[VMIN]  = 0;
     current_console_setting.c_cc[VTIME] = 1;
-    tcsetattr(0, TCSANOW, &current_console_setting);
+    tcsetattr(stdio::stdin_fd, TCSANOW, &current_console_setting);
 
     // Set keyboard.
     ioctl(stdio::stdin_fd, KDSKBMODE, K_MEDIUMRAW);
 
-    // Set non-buffering output.
-    setvbuf(stdout, nullptr, _IONBF, (size_t)0);
+
 #elif _env_windows
     DWORD  current_console_mode;
     HANDLE current_console = GetStdHandle(STD_INPUT_HANDLE);
@@ -91,7 +93,7 @@ void sys_call_namesp::prepareConsole()
 void sys_call_namesp::restoreConsole()
 {
 #ifdef _env_linux
-    tcsetattr(0, TCSANOW, &default_console_state);
+    tcsetattr(stdio::stdin_fd, TCSANOW, &default_console_state);
     ioctl(stdio::stdin_fd, KDSKBMODE, &default_keyboard_state);
 #elif _env_windows
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), default_console_state);
@@ -107,6 +109,7 @@ sys_call_namesp::termios sys_call_namesp::getDefaultConsoleState()
     return state;
 }
 
+
 int sys_call_namesp::getDefaultKeyboardState()
 {
     int kbd_mode;
@@ -120,6 +123,8 @@ DWORD sys_call_namesp::getDefaultConsoleState()
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
     return mode;
 }
+
+
 int sys_call_namesp::getDefaultKeyboardState()
 {
     // TODO: No need to get?

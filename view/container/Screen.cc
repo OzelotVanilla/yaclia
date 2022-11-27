@@ -18,8 +18,7 @@ void Screen::draw()
         for (size_t line_index = 0; line_index < size_vert; line_index++)
         {
             moveCursorTo(from_left, from_top + line_index);
-            // printf("%s", this->draw_info.char_view[line_index].c_str());
-            printf("%s", this->draw_info.char_view[line_index].c_str());
+            writeStdout(this->draw_info.char_view[line_index]);
         }
     }
 
@@ -33,6 +32,8 @@ void Screen::draw()
 
 void Screen::updateCharView()
 {
+    this->updateConsoleRelatedInfo();
+
     const let line_to_fill = string(this->draw_info.size_horizontal, this->background_char);
 
     for (size_t line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
@@ -44,6 +45,15 @@ void Screen::updateCharView()
 
 void Screen::updateConsoleRelatedInfo()
 {
+    const let height = terminal_namesp::current_console_status.height;
+    const let width  = terminal_namesp::current_console_status.width;
+
+    if (height != this->draw_info.size_vertical or width != this->draw_info.size_horizontal)
+    {
+        this->draw_info.size_vertical   = height;
+        this->draw_info.size_horizontal = width;
+        this->draw_info.char_view.reserve(height);
+    }
 }
 
 Screen& Screen::pushInWindow(Window* w)
@@ -77,16 +87,11 @@ Screen& Screen::setBackgroundChar(uchar c)
 
 Screen::constructor()
 {
-    delegate(ConsoleConfig());
-}
-
-Screen::constructor(ConsoleConfig c)
-{
-    this->console_config            = &c;
-    this->window_binded             = new vector<Window*>();
-    this->need_to_update_char_view  = true;
-    this->draw_info.size_horizontal = c.getWidth();
-    this->draw_info.size_vertical   = c.getHeight();
+    this->window_binded            = new vector<Window*>();
+    this->need_to_update_char_view = true;
+    // This will be updated
+    this->draw_info.size_horizontal = terminal_namesp::current_console_status.width;
+    this->draw_info.size_vertical   = terminal_namesp::current_console_status.height;
     this->draw_info.char_view       = vector<string>();
     this->draw_info.char_view.reserve(this->draw_info.size_vertical);
 }

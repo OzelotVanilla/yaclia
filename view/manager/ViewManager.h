@@ -14,6 +14,7 @@
 #define constructor ViewManager
 
 
+class Screen;
 
 // There exist a static member.
 /* static ViewManager view_manager; */
@@ -35,6 +36,9 @@ class ViewManager
     ViewManager& pushScreen(Screen* s);
     ViewManager& popScreen();
 
+    int getConsoleLines();
+    int getConsoleColumns();
+
   public:
     void handleInterrupt();
 
@@ -49,6 +53,8 @@ class ViewManager
 
     ViewManager& processInput();
     ViewManager& handleInput(ProcessedKeyInput data);
+
+    ViewManager& updateConsoleRelatedInfo();
 
   private:
     vector<Screen*>* screens = nullptr;

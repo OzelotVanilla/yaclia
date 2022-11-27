@@ -109,24 +109,23 @@ bool key_input_namesp::getAndWriteConsoleInput(KeyInputBuffer& key_input_buffer)
             // It is a pure new sequence to read, no previous state or modifier.
             else
             {
+                ProcessedKeyInput key_input;
+
                 // If a `ctrl + alphabet` or a enter.
-                printf("Read pure %d.\r\n", buffer[i]);
                 if (buffer[i] <= 26)
                 {
-                    printf("\tControl Seq:\r\n");
                     // But it can be a enter.
-                    if (buffer[i] == 13) { key_input_buffer.push({ KbdChar::enter, KbdModifier::none }); }
+                    if (buffer[i] == 13) { key_input = { KbdChar::enter, KbdModifier::none }; }
 
                     // Or it is a `ctrl + alphabet`, remember `ctrl + a` is `1` not `0`.
                     // Because `0` for `ctrl + space`.
-                    else if (buffer[i] == 0) { key_input_buffer.push({ KbdChar::space, KbdModifier::ctrl }); }
-                    else { key_input_buffer.push({ KbdChar(96 + buffer[i]), KbdModifier::ctrl }); }
+                    else if (buffer[i] == 0) { key_input = { KbdChar::space, KbdModifier::ctrl }; }
+                    else { key_input = { KbdChar(96 + buffer[i]), KbdModifier::ctrl }; }
                 }
                 else if (buffer[i] == 27) // Might be a `esc` or `alt`, or something like arrow key.
                 {
-                    printf("\tEsc:\r\n");
                     // If simple `esc`, there should not be text after
-                    if (i + 1 >= length_readed) { key_input_buffer.push({ KbdChar::esc, KbdModifier::none }); }
+                    if (i + 1 >= length_readed) { key_input = { KbdChar::esc, KbdModifier::none }; }
                     // Else it is an `alt`, or something arrow key.
                     else
                     {
@@ -135,9 +134,10 @@ bool key_input_namesp::getAndWriteConsoleInput(KeyInputBuffer& key_input_buffer)
                 }
                 else // Trival sequence, convert using ASCII code.
                 {
-                    printf("\tTrival:\r\n");
-                    key_input_buffer.push({ KbdChar(buffer[i]), KbdModifier::none });
+                    key_input = { KbdChar(buffer[i]), KbdModifier::none };
                 }
+
+                key_input_buffer.push(key_input);
             }
         }
 
