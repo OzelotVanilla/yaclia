@@ -40,19 +40,19 @@
 namespace stdio
 {
 #include <stdio.h>
-// #ifdef stdin
-// #undef stdin
-// #endif
-// #ifdef stdout
-// #undef stdout
-// #endif
+#ifdef stdin
+#undef stdin
+#endif
+#ifdef stdout
+#undef stdout
+#endif
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-static FILE* stdin     = stdin;
-static int   stdin_fd  = STDIN_FILENO;
+static FILE* stdin     = fopen("/dev/stdin", "r");
+static int   stdin_fd  = fileno(stdin);
 static FILE* stdout    = fopen("/dev/stdout", "rw");
-static int   stdout_fd = STDOUT_FILENO;
+static int   stdout_fd = fileno(stdout);
 } // namespace stdio
 #elif _env_windows
 // In Windows, due to too many macro define, currently not in namespace
@@ -169,12 +169,13 @@ inline size_t len(const list<EleType>& container)
  * @tparam EleType
  * @param container
  * @param checker
- * @return int
+ * @return `-1` if not found, or else the index.
  */
 template <typename EleType>
 inline int indexOfFirst(const std::vector<EleType>& container, function<bool(EleType)> checker)
 {
-    return std::distance(container.begin(), std::find_if(container.begin(), container.end(), checker));
+    const let index = std::distance(container.begin(), std::find_if(container.begin(), container.end(), checker));
+    return index != container.size() ? index : -1;
 }
 
 // template <typename EleType>
@@ -182,3 +183,9 @@ inline int indexOfFirst(const std::vector<EleType>& container, function<bool(Ele
 // {
 //     return container.at(randInt(0, container.size() - 1));
 // }
+
+template <typename EleType>
+inline void forEach(const std::vector<EleType>& container, function<void(EleType)> action)
+{
+    for_each(container.begin(), container.end(), action);
+}

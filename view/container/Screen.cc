@@ -56,11 +56,13 @@ void Screen::updateConsoleRelatedInfo()
     }
 }
 
+
 Screen& Screen::pushInWindow(Window* w)
 {
     this->window_binded->push_back(w);
     return *this;
 }
+
 
 Screen& Screen::popOutWindow()
 {
@@ -68,10 +70,12 @@ Screen& Screen::popOutWindow()
     return *this;
 }
 
+
 Screen& Screen::addWindow(Window* w)
 {
     return this->pushInWindow(w);
 }
+
 
 Screen& Screen::deleteWindow()
 {
@@ -82,8 +86,16 @@ Screen& Screen::setBackgroundChar(uchar c)
 {
     this->background_char          = c;
     this->need_to_update_char_view = true;
+    this->notifySubsriber({ { "redraw", "true" } });
     return *this;
 }
+
+
+void Screen::notifySubsriber(const NotificationDict& info)
+{
+    forEach(*this->subscribers, (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); }));
+}
+
 
 Screen::constructor()
 {

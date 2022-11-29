@@ -39,6 +39,7 @@ ViewManager& ViewManager::draw()
 ViewManager& ViewManager::pushScreen(Screen* s)
 {
     this->screens->push_back(s);
+    s->addSubscriber(this);
     this->top_screen = s;
     return *this;
 }
@@ -46,6 +47,7 @@ ViewManager& ViewManager::pushScreen(Screen* s)
 
 ViewManager& ViewManager::popScreen()
 {
+    this->top_screen->removeSubscriber(this);
     this->screens->pop_back();
     this->top_screen = this->screens->at(len(*this->screens) - 1);
     return *this;
@@ -97,6 +99,13 @@ ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 
     return *this;
 }
+
+
+/* virtual */ void ViewManager::updateFromNotification(NotificationDict info)
+{
+    if (info.contains("redraw") and info["redraw"] == "true") { this->need_to_draw = true; }
+}
+
 
 
 void ViewManager::handleInterrupt()

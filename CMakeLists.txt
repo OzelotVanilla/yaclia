@@ -8,11 +8,6 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 endif (UNIX)
 enable_testing()
 
-# Find `curses` and `ncurses`
-#TODO Get out of `ncurses`
-# find_package(Curses REQUIRED)
-# set (CURSES_USE_NCURSES TRUE)
-
 # Compile options
 add_compile_options(-enable-pretty-printing)
 
@@ -20,13 +15,14 @@ add_compile_options(-enable-pretty-printing)
 aux_source_directory(system SystemDirSelf)
 aux_source_directory(system/signal SystemSignal)
 aux_source_directory(util Util)
+aux_source_directory(util/observer_pattern ObserverPattern)
 aux_source_directory(view/container ViewContainer)
 aux_source_directory(view/manager ViewManager)
 set(SystemDir ${SystemDirSelf} ${SystemSignal})
 set(View ${ViewContainer} ${ViewManager})
 
 # Relate variable to different option of building project
-set(StandardYacliaOption ${SystemDir} ${Util} ${View})
+set(StandardYacliaOption ${SystemDir} ${ObserverPattern} ${Util} ${View})
 
 # Final excutables
 add_executable(yaclia head.h ${StandardYacliaOption} main.h main.cc)

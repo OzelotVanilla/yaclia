@@ -25,12 +25,12 @@ bool key_input_namesp::getAndWriteConsoleInput(KeyInputBuffer& key_input_buffer)
         bool has_previous_seq = false;
         bool alt_code_found   = false;
 
-        printf("raw: ");
-        for (size_t i = 0; i < length_readed; i++)
-        {
-            printf("%3d, ", buffer[i]);
-        }
-        printf("\b\r\n");
+        // printf("raw: ");
+        // for (size_t i = 0; i < length_readed; i++)
+        // {
+        //     printf("%3d, ", buffer[i]);
+        // }
+        // printf("\b\r\n");
 
 
         for (size_t i = 0; i < length_readed; i++)

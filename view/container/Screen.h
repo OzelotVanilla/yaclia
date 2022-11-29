@@ -4,6 +4,7 @@
 #include "../../util/terminal.h"
 #include "ViewContainer.h"
 #include "Window.h"
+#include "../../util/observer_pattern/Publisher.trait.h"
 
 #ifdef constructor
 #undef constructor
@@ -17,7 +18,7 @@
  *
  * It will hold several `Window`.
  */
-class Screen : public ViewContainer
+class Screen : public ViewContainer, public Publisher
 {
   public:
     Screen& pushInWindow(Window* w);
@@ -33,6 +34,9 @@ class Screen : public ViewContainer
     /* virtual */ void updateConsoleRelatedInfo();
 
     Screen& setBackgroundChar(uchar c);
+
+  public:
+    virtual void notifySubsriber(const NotificationDict& info);
 
   private:
     bool registerd_into_stack = false;

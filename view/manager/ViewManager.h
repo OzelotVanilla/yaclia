@@ -5,6 +5,7 @@
 #include "../../util/terminal.h"
 #include "../../system/sys_call.h"
 #include "../../util/key_input.h"
+#include "../../util/observer_pattern/Subscriber.trait.h"
 
 
 #ifdef constructor
@@ -19,7 +20,7 @@ class Screen;
 // There exist a static member.
 /* static ViewManager view_manager; */
 
-class ViewManager
+class ViewManager : public Subscriber
 {
   public:
     /**
@@ -40,6 +41,8 @@ class ViewManager
     int getConsoleColumns();
 
   public:
+    virtual void updateFromNotification(NotificationDict info);
+
     void handleInterrupt();
 
   private:

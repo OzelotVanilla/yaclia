@@ -26,7 +26,7 @@ namespace sys_call_namesp
 /**
  * Function accepting int, return void, to handle signal.
  */
-typedef void (*SignalHandlerFunc)(int);
+using SignalHandlerFunc = void (*)(int);
 
 
 /**
