@@ -8,9 +8,12 @@ void Screen::draw()
     {
         this->updateCharView();
         this->need_to_update_char_view = false;
+        this->need_to_draw             = true;
+    }
 
-        // Draw the background, if the screen itself is changed
-
+    if (this->need_to_draw)
+    {
+        // Draw the background
         const let from_left = this->draw_info.position_from_left;
         const let from_top  = this->draw_info.position_from_top;
         const let size_vert = this->draw_info.size_vertical;
@@ -20,6 +23,9 @@ void Screen::draw()
             moveCursorTo(from_left, from_top + line_index);
             writeStdout(this->draw_info.char_view[line_index]);
         }
+
+        // Until next change, like changing background, or some refresh
+        this->need_to_draw = false;
     }
 
     // Let each window draw itself
@@ -64,9 +70,18 @@ Screen& Screen::pushInWindow(Window* w)
 }
 
 
-Screen& Screen::popOutWindow()
+Screen& Screen::popOutWindow(Window* w)
 {
-    this->window_binded->pop_back();
+    const let index = indexOfFirst(*this->window_binded, w);
+    if (index >= 0)
+    {
+        std::swap(this->window_binded->at(index), this->window_binded->at(len(*this->window_binded) - 1));
+        this->window_binded->pop_back();
+    }
+    else
+    {
+        // TODO: Throw an error
+    }
     return *this;
 }
 
@@ -77,9 +92,9 @@ Screen& Screen::addWindow(Window* w)
 }
 
 
-Screen& Screen::deleteWindow()
+Screen& Screen::deleteWindow(Window* w)
 {
-    return this->popOutWindow();
+    return this->popOutWindow(w);
 }
 
 Screen& Screen::setBackgroundChar(uchar c)

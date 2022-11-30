@@ -1,7 +1,7 @@
 #include "key_input.h"
 
 
-bool key_input_namesp::getAndWriteConsoleInput(KeyInputBuffer& key_input_buffer)
+bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buffer)
 {
     bool has_read_success;
 #ifdef _env_linux

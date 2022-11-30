@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../head.h"
+#include "../../util/terminal.h"
 #include "ViewContainer.h"
 #include "WindowFrameStyle.h"
 #include "Layout.h"
@@ -22,10 +23,18 @@ class Window : public ViewContainer
     Window& move(int to_left, int to_up);
     Window& putInPlace(int from_left, int from_up);
 
+  private:
+    string drawTitleLine() const;
+    string drawBottomLine() const;
+
+  private:
+    string title       = "";
+    string status_icon = " ";
+
 
   public:
     constructor();
-    Window createSized(int width, int height);
+    static Window createSized(int width, int height);
     constructor(int width, int height, int from_left, int from_top);
 
   private:

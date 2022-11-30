@@ -13,4 +13,16 @@ struct WindowFrameStyle
     bool has_title = true;
 
     bool has_frame = true;
+
+    string upper_left_char = "┌";
+
+    string upper_right_char = "┐";
+
+    string lower_left_char = "└";
+
+    string lower_right_char = "┘";
+
+    string horizontal_line_char = "─";
+
+    string vertical_line_char = "│";
 };

@@ -17,6 +17,9 @@ ViewManager& ViewManager::run()
 
 ViewManager& ViewManager::draw()
 {
+    // Update the console information to the global var.
+    terminal_namesp::current_console_status = terminal_namesp::updateConsoleStatusInfo();
+
     if (this->need_to_draw)
     {
         // Check if no screen, give error
@@ -58,7 +61,6 @@ ViewManager& ViewManager::start()
 {
     changeToAlternativeScreen();
     // Make the current console non-blocking and non-echo-input
-    printf("Stdout is %s\r\n", parseString(size_t(stdio::stdout)).c_str());
     prepareConsole();
     moveCursorTo(0, 0);
 
@@ -77,7 +79,7 @@ ViewManager& ViewManager::end()
 ViewManager& ViewManager::processInput()
 {
     // Get input (at this time, console should be non-blocking and non-echo-input)
-    getAndWriteConsoleInput(*this->key_input_buffer);
+    getAndWriteKeyInputToBuffer(*this->key_input_buffer);
 
     // Send input to screen, and it may also send to active window
     if (not this->key_input_buffer->empty())
@@ -85,7 +87,6 @@ ViewManager& ViewManager::processInput()
         this->handleInput(this->key_input_buffer->front());
         this->key_input_buffer->pop();
     }
-
 
     return *this;
 }

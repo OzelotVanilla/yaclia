@@ -25,11 +25,11 @@ typedef std::queue<ProcessedKeyInput> KeyInputBuffer;
 /**
  * @brief Get parsed keyboard input from raw. Console must be non-blocking and non-echo-input now!
  *
- * @param parsed_data_out Pass the structure for receiving parsed data.
+ * @param key_input_buffer The buffer to contain the processed key input.
  * @return true: Valid data got.
  * @return false: Non-valid data.
  */
-bool getAndWriteConsoleInput(KeyInputBuffer& key_input_buffer);
+bool getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buffer);
 
 // Function returning `stdin` or "stdin handle"
 #ifdef _env_linux
@@ -126,7 +126,7 @@ using key_input_namesp::ProcessedKeyInput;
 using key_input_namesp::KbdChar;
 using key_input_namesp::KbdModifier;
 using key_input_namesp::KeyInputBuffer;
-using key_input_namesp::getAndWriteConsoleInput;
+using key_input_namesp::getAndWriteKeyInputToBuffer;
 using key_input_namesp::str;
 
 enum class key_input_namesp::KbdChar

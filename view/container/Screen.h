@@ -22,10 +22,10 @@ class Screen : public ViewContainer, public Publisher
 {
   public:
     Screen& pushInWindow(Window* w);
-    Screen& popOutWindow();
+    Screen& popOutWindow(Window* w);
 
     inline Screen& addWindow(Window* w);
-    inline Screen& deleteWindow();
+    inline Screen& deleteWindow(Window* w);
 
     /* virtual */ void draw();
 

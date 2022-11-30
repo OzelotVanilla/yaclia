@@ -1,6 +1,5 @@
 #include "main.h"
 
-bool main_process_can_run = true;
 
 int main(int argc, char const* argv[])
 {
@@ -10,7 +9,9 @@ int main(int argc, char const* argv[])
     view_manager.start();
 
     //  Main Process
-    view_manager.run();
+    // view_manager.run();
+    moveCursorTo(5, 5);
+    printStdout("test");
 
     // Restore
     view_manager.end();
@@ -19,9 +20,11 @@ int main(int argc, char const* argv[])
 
 
 #ifdef _env_linux
+
 void registerAllSignalHandler()
 {
     registerSignalHandler(UnixSignal::interrupt, onInterrupt);
+    registerSignalHandler(UnixSignal::termination, onTerminate);
 }
 
 
@@ -29,8 +32,16 @@ void onInterrupt(int sig)
 {
     view_manager.handleInterrupt();
 }
+
+void onTerminate(int sig)
+{
+    view_manager.end();
+}
+
 #elif _env_windows
+
 void registerAllSignalHandler()
 {
 }
+
 #endif

@@ -78,6 +78,7 @@ using std::endl;
 
 using std::function;
 using std::string;
+using std::wstring;
 using std::vector;
 using std::array;
 using std::list;
@@ -87,7 +88,7 @@ using std::list;
 typedef int8_t byte;
 #endif
 
-typedef char uchar;
+typedef wchar_t uchar;
 
 #define lambda(...) [](__VA_ARGS__)
 #define lambda_ref(...) [&](__VA_ARGS__)
@@ -160,6 +161,12 @@ inline size_t len(const list<EleType>& container)
     return container.size();
 }
 
+inline string str(wchar_t w_char)
+{
+    const let w_char_str = wstring(&w_char);
+    return string(w_char_str.begin(), w_char_str.end());
+}
+
 /**
  * @brief Function to get the first index of the value fulfill checker.
  *
@@ -175,6 +182,13 @@ template <typename EleType>
 inline int indexOfFirst(const std::vector<EleType>& container, function<bool(EleType)> checker)
 {
     const let index = std::distance(container.begin(), std::find_if(container.begin(), container.end(), checker));
+    return index != container.size() ? index : -1;
+}
+
+template <typename EleType>
+inline int indexOfFirst(const std::vector<EleType>& container, const EleType& element)
+{
+    const let index = std::distance(container.begin(), std::find(container.begin(), container.end(), element));
     return index != container.size() ? index : -1;
 }
 
