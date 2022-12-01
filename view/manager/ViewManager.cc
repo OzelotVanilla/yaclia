@@ -7,8 +7,8 @@ ViewManager& ViewManager::run()
     while (this->main_process_can_run)
     {
         terminal_namesp::updateConsoleStatusInfo();
-        view_manager.processInput();
-        view_manager.draw();
+        this->processInput();
+        this->draw();
     }
 
     return *this;
@@ -29,7 +29,7 @@ ViewManager& ViewManager::draw()
         }
 
         // Draw top screen
-        top_screen->draw();
+        this->getActiveScreen().draw();
     }
 
     // If use printf, force console to show, do not be lazy.
@@ -43,17 +43,20 @@ ViewManager& ViewManager::pushScreen(Screen* s)
 {
     this->screens->push_back(s);
     s->addSubscriber(this);
-    this->top_screen = s;
     return *this;
 }
 
 
 ViewManager& ViewManager::popScreen()
 {
-    this->top_screen->removeSubscriber(this);
+    this->getActiveScreen().removeSubscriber(this);
     this->screens->pop_back();
-    this->top_screen = this->screens->at(len(*this->screens) - 1);
     return *this;
+}
+
+Screen& ViewManager::getActiveScreen()
+{
+    return *this->screens->at(this->screens->size() - 1);
 }
 
 
@@ -63,6 +66,7 @@ ViewManager& ViewManager::start()
     // Make the current console non-blocking and non-echo-input
     prepareConsole();
     moveCursorTo(0, 0);
+    hideCursor();
 
     return *this;
 }
@@ -70,6 +74,7 @@ ViewManager& ViewManager::start()
 
 ViewManager& ViewManager::end()
 {
+    showCursor();
     restoreConsole();
     backFromAlternativeScreen();
     return *this;
@@ -128,8 +133,10 @@ void ViewManager::handleSignal()
 ViewManager::constructor()
 {
     this->screens = new vector<Screen*>();
-    // Push a default screen in
-    this->pushScreen(new Screen());
+    // // Push a default screen in
+    // this->pushScreen(new Screen());
+    // let w = Window::createSized(20, 5).setTitle("Too long string");
+    // this->getActiveScreen().pushInWindow(&w);
 
     this->key_input_buffer = new KeyInputBuffer();
 }

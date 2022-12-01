@@ -23,6 +23,8 @@ class Window : public ViewContainer
     Window& move(int to_left, int to_up);
     Window& putInPlace(int from_left, int from_up);
 
+    Window& setTitle(string title);
+
   private:
     string drawTitleLine() const;
     string drawBottomLine() const;

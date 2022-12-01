@@ -18,11 +18,13 @@ void Screen::draw()
         const let from_top  = this->draw_info.position_from_top;
         const let size_vert = this->draw_info.size_vertical;
 
-        for (size_t line_index = 0; line_index < size_vert; line_index++)
+        size_t line_index = 0;
+        for (; line_index < size_vert; line_index++)
         {
             moveCursorTo(from_left, from_top + line_index);
-            writeStdout(this->draw_info.char_view[line_index]);
+            printf("%s\r\n", this->draw_info.char_view[line_index].c_str());
         }
+        flushOutputToConsole();
 
         // Until next change, like changing background, or some refresh
         this->need_to_draw = false;

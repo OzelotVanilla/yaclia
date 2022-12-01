@@ -81,6 +81,11 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
                             }
                             key_input = { KbdChar(int(KbdChar::arrow_up) + (buffer[i + 4] - 65)), modifier };
                         }
+                        // Get a scroll up
+                        else if (buffer[3] == '\e' and buffer[2] == buffer[5])
+                        {
+                            key_input = { KbdChar(int(KbdChar::scroll_up) + (buffer[2] - 65)), KbdModifier::none };
+                        }
                         else
                         {
                             throw UnknownKeyInputSeq(
@@ -130,6 +135,7 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
                     else
                     {
                         alt_code_found = has_previous_seq = true;
+                        continue;
                     }
                 }
                 else // Trival sequence, convert using ASCII code.

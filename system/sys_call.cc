@@ -65,7 +65,7 @@ void sys_call_namesp::prepareConsole()
     // Idea from: https://stackoverflow.com/questions/46142246/getchar-with-non-canonical-mode-on-unix-and-windows
 #ifdef _env_linux
     // Set non-buffering output. What you write to stdout will immediately appear.
-    setvbuf(stdio::stdout, nullptr, _IONBF, 0);
+    // setvbuf(stdio::stdout, nullptr, _IONBF, 0);
 
     // Set the console.
     termios current_console_setting;
@@ -78,7 +78,6 @@ void sys_call_namesp::prepareConsole()
 
     // Set keyboard.
     ioctl(stdio::stdin_fd, KDSKBMODE, K_MEDIUMRAW);
-
 
 #elif _env_windows
     DWORD  current_console_mode;

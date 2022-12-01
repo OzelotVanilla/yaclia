@@ -36,6 +36,7 @@ class ViewManager : public Subscriber
 
     ViewManager& pushScreen(Screen* s);
     ViewManager& popScreen();
+    Screen&      getActiveScreen();
 
     int getConsoleLines();
     int getConsoleColumns();
@@ -62,7 +63,6 @@ class ViewManager : public Subscriber
   private:
     vector<Screen*>* screens = nullptr;
 
-    Screen* top_screen;
 
     bool should_run = true;
 

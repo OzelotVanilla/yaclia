@@ -8,10 +8,16 @@ int main(int argc, char const* argv[])
     // Start view manager
     view_manager.start();
 
+    // Give screen
+    let* s = new Screen();
+    let  w = Window::createSized(50, 12).setTitle("Too long string");
+    s->setBackgroundChar('.');
+    s->pushInWindow(&w);
+    view_manager.pushScreen(s);
+
     //  Main Process
-    // view_manager.run();
-    moveCursorTo(5, 5);
-    printStdout("test");
+    view_manager.run();
+
 
     // Restore
     view_manager.end();

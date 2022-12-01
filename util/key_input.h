@@ -226,7 +226,9 @@ enum class key_input_namesp::KbdChar
     arrow_up,
     arrow_down,
     arrow_right,
-    arrow_left
+    arrow_left,
+    scroll_up,
+    scroll_down
 };
 
 enum class key_input_namesp::KbdModifier

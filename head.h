@@ -49,10 +49,10 @@ namespace stdio
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-static FILE* stdin     = fopen("/dev/stdin", "r");
-static int   stdin_fd  = fileno(stdin);
-static FILE* stdout    = fopen("/dev/stdout", "rw");
-static int   stdout_fd = fileno(stdout);
+static int   stdin_fd  = STDIN_FILENO;
+static int   stdout_fd = STDOUT_FILENO;
+static FILE* stdin     = fdopen(stdin_fd, "rw");
+static FILE* stdout    = fdopen(stdout_fd, "rw");
 } // namespace stdio
 #elif _env_windows
 // In Windows, due to too many macro define, currently not in namespace
@@ -161,10 +161,23 @@ inline size_t len(const list<EleType>& container)
     return container.size();
 }
 
+inline size_t len(const string& s)
+{
+    return s.size();
+}
+
 inline string str(wchar_t w_char)
 {
     const let w_char_str = wstring(&w_char);
     return string(w_char_str.begin(), w_char_str.end());
+}
+
+inline string repeatStr(const string& s, size_t times)
+{
+    string result;
+    result.reserve(len(s) * times);
+    while (times-- > 0) { result += s; }
+    return std::move(result);
 }
 
 /**

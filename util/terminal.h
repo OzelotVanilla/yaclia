@@ -39,6 +39,18 @@ inline void moveCursorTo(CursorPosition pos)
 }
 
 
+inline void hideCursor()
+{
+    printf("\e[?25l");
+}
+
+
+inline void showCursor()
+{
+    printf("\e[?25h");
+}
+
+
 inline void resetTerminalToDefault()
 {
     printStdout("%s", "\033c");

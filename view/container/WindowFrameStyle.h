@@ -10,9 +10,14 @@ struct WindowFrameStyle
      */
     bool has_brief_icon = true;
 
-    bool has_title = true;
+    /**
+     * Until user set a title.
+     */
+    bool has_title = false;
 
     bool has_frame = true;
+
+    bool has_focus_frame_shadow = true;
 
     string upper_left_char = "┌";
 
