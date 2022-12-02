@@ -10,6 +10,11 @@
 
 using NotificationDict = std::map<string, string>;
 
+inline bool dictCheckEqual(const NotificationDict& d, const string& key, const string& value)
+{
+    return d.contains(key) and (d.at(key) == value);
+}
+
 class Subscriber;
 
 using SubscriberArray = vector<Subscriber*>;
@@ -17,5 +22,5 @@ using SubscriberArray = vector<Subscriber*>;
 class Subscriber
 {
   public:
-    virtual void updateFromNotification(NotificationDict info) = 0;
+    virtual void updateFromNotification(const NotificationDict& info) = 0;
 };

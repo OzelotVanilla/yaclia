@@ -2,10 +2,11 @@
 
 #include "../../head.h"
 #include "../../util/terminal.h"
+#include "../../util/observer_pattern/Publisher.trait.h"
 #include "ViewContainer.h"
 #include "WindowStatusIcon.h"
 #include "WindowFrameStyle.h"
-#include "Layout.h"
+#include "Field.h"
 
 #ifdef constructor
 #undef constructor
@@ -14,12 +15,14 @@
 #define constructor Window
 
 
-class Window : public ViewContainer
+class Window : public ViewContainer, public Publisher
 {
   public:
     /* virtual */ void draw();
     /* virtual */ void updateCharView();
     /* virtual */ void updateConsoleRelatedInfo();
+
+    /* virtual */ void notifySubsriber(const NotificationDict& info);
 
     Window&        moveTo(int from_left, int from_top);
     inline Window& putInPlace(int from_left, int from_top);
@@ -32,6 +35,15 @@ class Window : public ViewContainer
         return *this;
     }
 
+    const string& getId()
+    {
+        return this->id;
+    }
+
+    void close()
+    {
+    }
+
   public:
     WindowStatus window_status = WindowStatus::none;
 
@@ -41,7 +53,7 @@ class Window : public ViewContainer
 
   private:
     WindowFrameStyle window_style;
-    vector<Layout*>* layouts = nullptr;
+    vector<Field*>*  layouts = nullptr;
 
     string title       = "";
     string status_icon = " ";

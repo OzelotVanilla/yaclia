@@ -100,9 +100,9 @@ ViewManager& ViewManager::processInput()
 ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 {
     // If this is directly affecting view manager.
-    if (this->input_handlers->contains(ProcessedKeyInput(KbdChar::m, KbdModifier::alt)))
+    if (this->input_handlers->contains(data))
     {
-        this->input_handlers->at(ProcessedKeyInput(KbdChar::m, KbdModifier::alt))(this);
+        this->input_handlers->at(data)(this);
     }
 
     // Else, send it to active screen.
@@ -111,9 +111,9 @@ ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 }
 
 
-/* virtual */ void ViewManager::updateFromNotification(NotificationDict info)
+/* virtual */ void ViewManager::updateFromNotification(const NotificationDict& info)
 {
-    if (info.contains("redraw") and info["redraw"] == "true") { this->need_to_draw = true; }
+    if (dictCheckEqual(info, "redraw", "true")) { this->need_to_draw = true; }
 }
 
 

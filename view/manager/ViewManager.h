@@ -47,7 +47,7 @@ class ViewManager : public Subscriber
     int getConsoleColumns();
 
   public:
-    virtual void updateFromNotification(NotificationDict info);
+    /* virtual */ void updateFromNotification(const NotificationDict& info);
 
     void handleInterrupt();
 
@@ -75,6 +75,8 @@ class ViewManager : public Subscriber
     bool need_to_draw = true;
 
     bool main_process_can_run = true;
+
+    bool showing_menu = false;
 
     KeyInputBuffer* key_input_buffer = nullptr;
 

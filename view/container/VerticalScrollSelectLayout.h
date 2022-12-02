@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../head.h"
-#include "Layout.h"
+#include "Field.h"
 
 #ifdef constructor
 #undef constructor
@@ -9,6 +9,14 @@
 
 #define constructor VerticalScrollSelectLayout
 
-class VerticalScrollSelectLayout : public Layout
+class VerticalScrollSelectField : public Field
 {
+  public:
+    /* virtual */ void draw();
+    /* virtual */ void updateCharView();
+
+  protected:
+    vector<string> items;
+
+    size_t num_selected = 0;
 };

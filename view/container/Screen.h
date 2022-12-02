@@ -5,6 +5,7 @@
 #include "ViewContainer.h"
 #include "Window.h"
 #include "../../util/observer_pattern/Publisher.trait.h"
+#include "../../util/observer_pattern/Subscriber.trait.h"
 
 #ifdef constructor
 #undef constructor
@@ -18,7 +19,7 @@
  *
  * It will hold several `Window`.
  */
-class Screen : public ViewContainer, public Publisher
+class Screen : public ViewContainer, public Publisher, public Subscriber
 {
   public:
     Screen& pushInWindow(Window* w);
@@ -40,6 +41,7 @@ class Screen : public ViewContainer, public Publisher
 
     virtual void updateConsoleRelatedInfo();
 
+
     Screen& setId(string new_id)
     {
         this->id = new_id;
@@ -50,6 +52,7 @@ class Screen : public ViewContainer, public Publisher
 
   public:
     virtual void notifySubsriber(const NotificationDict& info);
+    virtual void updateFromNotification(const NotificationDict& info);
 
   private:
     bool registerd_into_stack = false;

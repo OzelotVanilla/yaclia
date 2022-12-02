@@ -14,7 +14,7 @@
 class Publisher
 {
   public:
-    virtual void notifySubsriber(const NotificationDict&) = 0;
+    virtual void notifySubsriber(const NotificationDict& info) = 0;
 
     virtual void addSubscriber(Subscriber* s)
     {

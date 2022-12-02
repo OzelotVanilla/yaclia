@@ -68,6 +68,7 @@ void Screen::updateConsoleRelatedInfo()
 Screen& Screen::pushInWindow(Window* w)
 {
     this->window_binded->push_back(w);
+    w->addSubscriber(this);
     return *this;
 }
 
@@ -77,6 +78,7 @@ Screen& Screen::popOutWindow(Window* w)
     const let index = indexOfFirst(*this->window_binded, w);
     if (index >= 0)
     {
+        this->window_binded->at(index)->removeSubscriber(this);
         std::swap(this->window_binded->at(index), this->window_binded->at(len(*this->window_binded) - 1));
         this->window_binded->pop_back();
     }
@@ -100,6 +102,20 @@ Screen& Screen::setBackgroundChar(uchar c)
 void Screen::notifySubsriber(const NotificationDict& info)
 {
     forEach(*this->subscribers, (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); }));
+}
+
+
+/* virtual */ void Screen::updateFromNotification(const NotificationDict& info)
+{
+    if (info.contains("window_close"))
+    {
+        const let& win_to_close_id = info.at("window_close");
+        indexOfFirst(
+            *this->window_binded,
+            (std::function<bool(Window*)>)
+                lambda_ref(Window * w_pointer) { return w_pointer->getId() == win_to_close_id; }
+        );
+    }
 }
 
 

@@ -9,6 +9,6 @@
 
 #define constructor Layout
 
-class Layout : public ViewContainer
+class Field : public ViewContainer
 {
 };

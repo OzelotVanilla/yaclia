@@ -90,6 +90,9 @@ Window& Window::moveTo(int from_left, int from_top)
 }
 
 
+/* virtual */ void Window::notifySubsriber(const NotificationDict& info) { }
+
+
 string Window::drawTitleLine() const
 {
     const let width  = this->draw_info.size_horizontal;
@@ -223,5 +226,5 @@ Window::constructor(int width, int height, int top_offset, int left_offset)
     const let char_view_length = this->window_style.has_focus_frame_shadow ? height + 1 : height;
     this->draw_info.char_view  = vector<string>(char_view_length);
 
-    this->layouts = new vector<Layout*>();
+    this->layouts = new vector<Field*>();
 }
