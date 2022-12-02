@@ -24,14 +24,27 @@ class Screen : public ViewContainer, public Publisher
     Screen& pushInWindow(Window* w);
     Screen& popOutWindow(Window* w);
 
-    inline Screen& addWindow(Window* w);
-    inline Screen& deleteWindow(Window* w);
+    Screen& addWindow(Window* w)
+    {
+        return this->pushInWindow(w);
+    }
 
-    /* virtual */ void draw();
+    Screen& deleteWindow(Window* w)
+    {
+        return this->popOutWindow(w);
+    }
 
-    /* virtual */ void updateCharView();
+    virtual void draw();
 
-    /* virtual */ void updateConsoleRelatedInfo();
+    virtual void updateCharView();
+
+    virtual void updateConsoleRelatedInfo();
+
+    Screen& setId(string new_id)
+    {
+        this->id = new_id;
+        return *this;
+    }
 
     Screen& setBackgroundChar(uchar c);
 

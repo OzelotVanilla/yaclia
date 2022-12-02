@@ -57,7 +57,12 @@ struct ProcessedKeyInput
     /**
      * Solve some problems like uppercase with `shift + alphabet`.
      */
-    bool operator==(const ProcessedKeyInput& rhs);
+    bool operator==(const ProcessedKeyInput& rhs) const;
+
+    // bool operator==(const ProcessedKeyInput rhs)
+    // {
+    //     return this->operator==(rhs);
+    // }
 }; // struct ProcessedKeyInput
 
 string str(const ProcessedKeyInput& key_input);
@@ -128,6 +133,22 @@ using key_input_namesp::KbdModifier;
 using key_input_namesp::KeyInputBuffer;
 using key_input_namesp::getAndWriteKeyInputToBuffer;
 using key_input_namesp::str;
+
+
+// Give ProcessedKeyInput a hash function
+namespace std
+{
+template <>
+class hash<ProcessedKeyInput>
+{
+  public:
+    size_t operator()(const ProcessedKeyInput& key_input) const
+    {
+        return hash<int>()(int(key_input.key)) ^ hash<int>()(int(key_input.modifier));
+    }
+};
+} // namespace std
+
 
 enum class key_input_namesp::KbdChar
 {

@@ -41,6 +41,8 @@
      */
     ViewDrawInfo draw_info;
 
+    string id;
+
     bool need_to_draw; // TODO What is the meaning of this ?
 
     bool need_to_update_char_view;

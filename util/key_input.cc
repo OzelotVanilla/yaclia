@@ -165,7 +165,7 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
     return has_read_success;
 }
 
-bool ProcessedKeyInput::operator==(const ProcessedKeyInput& key_input)
+bool ProcessedKeyInput::operator==(const ProcessedKeyInput& key_input) const
 {
     // If any state is invalid, give error.
     if (

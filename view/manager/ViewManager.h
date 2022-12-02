@@ -2,6 +2,7 @@
 
 #include "../../head.h"
 #include "../container/Screen.h"
+#include "../container/Window.h"
 #include "../../util/terminal.h"
 #include "../../system/sys_call.h"
 #include "../../util/key_input.h"
@@ -16,6 +17,10 @@
 
 
 class Screen;
+
+class ViewManager;
+
+using RegisteredInputHandle = std::unordered_map<ProcessedKeyInput, function<void(ViewManager*)>>;
 
 // There exist a static member.
 /* static ViewManager view_manager; */
@@ -63,6 +68,7 @@ class ViewManager : public Subscriber
   private:
     vector<Screen*>* screens = nullptr;
 
+    RegisteredInputHandle* input_handlers = nullptr;
 
     bool should_run = true;
 
@@ -78,6 +84,18 @@ class ViewManager : public Subscriber
 };
 
 static ViewManager view_manager = ViewManager();
+
+static Window view_manager_menu =
+    Window::createSized(
+        terminal_namesp::current_console_status.width - 4,
+        terminal_namesp::current_console_status.height - 4
+    )
+        .setTitle("Yaclia Menu")
+        .setId("view_manager_menu")
+        .moveTo(2, 1);
+
+void showViewManagerMenu(ViewManager* v);
+void closeViewManagerMenu(ViewManager* v);
 
 class NoScreenToShowError : public std::exception
 {

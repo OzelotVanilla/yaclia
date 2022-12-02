@@ -100,6 +100,10 @@ ViewManager& ViewManager::processInput()
 ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
 {
     // If this is directly affecting view manager.
+    if (this->input_handlers->contains(ProcessedKeyInput(KbdChar::m, KbdModifier::alt)))
+    {
+        this->input_handlers->at(ProcessedKeyInput(KbdChar::m, KbdModifier::alt))(this);
+    }
 
     // Else, send it to active screen.
 
@@ -130,15 +134,28 @@ void ViewManager::handleSignal()
 }
 
 
+void showViewManagerMenu(ViewManager* v)
+{
+    v->getActiveScreen().addWindow(&view_manager_menu);
+}
+
+
+
 ViewManager::constructor()
 {
-    this->screens = new vector<Screen*>();
+    terminal_namesp::current_console_status = terminal_namesp::updateConsoleStatusInfo();
+
+    this->screens        = new vector<Screen*>();
+    this->input_handlers = new RegisteredInputHandle();
     // // Push a default screen in
     // this->pushScreen(new Screen());
     // let w = Window::createSized(20, 5).setTitle("Too long string");
     // this->getActiveScreen().pushInWindow(&w);
 
     this->key_input_buffer = new KeyInputBuffer();
+
+    // By default, `alt + m` create a menu window
+    (*this->input_handlers)[ProcessedKeyInput(KbdChar::m, KbdModifier::alt)] = showViewManagerMenu;
 }
 
 

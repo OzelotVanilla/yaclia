@@ -88,17 +88,6 @@ Screen& Screen::popOutWindow(Window* w)
 }
 
 
-Screen& Screen::addWindow(Window* w)
-{
-    return this->pushInWindow(w);
-}
-
-
-Screen& Screen::deleteWindow(Window* w)
-{
-    return this->popOutWindow(w);
-}
-
 Screen& Screen::setBackgroundChar(uchar c)
 {
     this->background_char          = c;

@@ -8,7 +8,7 @@ struct WindowFrameStyle
     /**
      * There is a icon showing the current states of the window.
      */
-    bool has_brief_icon = true;
+    bool has_status_icon = true;
 
     /**
      * Until user set a title.

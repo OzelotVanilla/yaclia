@@ -10,9 +10,8 @@ int main(int argc, char const* argv[])
 
     // Give screen
     let* s = new Screen();
-    let  w = Window::createSized(50, 12).setTitle("Too long string");
+    // let  w = Window::createSized(50, 12).setTitle("Too long string");
     s->setBackgroundChar('.');
-    s->pushInWindow(&w);
     view_manager.pushScreen(s);
 
     //  Main Process
