@@ -35,12 +35,18 @@ class Screen : public ViewContainer, public Publisher, public Subscriber
         return this->popOutWindow(w);
     }
 
+    Window& getActiveWindow()
+    {
+        return *this->window_binded->at(len(*this->window_binded) - 1);
+    }
+
     virtual void draw();
 
     virtual void updateCharView();
 
     virtual void updateConsoleRelatedInfo();
 
+    virtual void handleInput(const ProcessedKeyInput& key_input);
 
     Screen& setId(string new_id)
     {

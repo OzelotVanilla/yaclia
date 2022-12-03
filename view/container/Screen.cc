@@ -18,7 +18,7 @@ void Screen::draw()
         const let from_top  = this->draw_info.position_from_top;
         const let size_vert = this->draw_info.size_vertical;
 
-        size_t line_index = 0;
+        isize line_index = 0;
         for (; line_index < size_vert; line_index++)
         {
             moveCursorTo(from_left, from_top + line_index);
@@ -44,10 +44,12 @@ void Screen::updateCharView()
 
     const let line_to_fill = string(this->draw_info.size_horizontal, this->background_char);
 
-    for (size_t line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
+    for (isize line_index = 0; line_index < this->draw_info.size_vertical; line_index++)
     {
         this->draw_info.char_view[line_index] = line_to_fill;
     }
+
+    this->need_to_draw = true;
 }
 
 
@@ -65,10 +67,24 @@ void Screen::updateConsoleRelatedInfo()
 }
 
 
+/* virtual */ void Screen::handleInput(const ProcessedKeyInput& key_input)
+{
+    // If it is for this screen.
+
+    // Else give active window.
+    if (len(*this->window_binded) > 0)
+    {
+        this->getActiveWindow().handleInput(key_input);
+    }
+}
+
+
 Screen& Screen::pushInWindow(Window* w)
 {
     this->window_binded->push_back(w);
     w->addSubscriber(this);
+    this->need_to_update_char_view = true;
+    this->notifySubsriber({ { "redraw", "true" } });
     return *this;
 }
 
@@ -86,6 +102,8 @@ Screen& Screen::popOutWindow(Window* w)
     {
         // TODO: Throw an error
     }
+
+    this->need_to_update_char_view = true;
     return *this;
 }
 

@@ -3,6 +3,7 @@
 #include "../../head.h"
 #include "../../system/signal/signal.h"
 #include "ViewDrawInfo.h"
+#include "../../util/key_input.h"
 
 #ifdef constructor
 #undef constructor
@@ -32,8 +33,10 @@
 
     virtual void updateCharView() = 0;
 
-  private:
-    virtual void updateConsoleRelatedInfo() = 0;
+    virtual void handleInput(const ProcessedKeyInput& key_input) = 0;
+
+    //   private:
+    // virtual void updateConsoleRelatedInfo() = 0;
 
   protected:
     /**
@@ -43,7 +46,7 @@
 
     string id;
 
-    bool need_to_draw; // TODO What is the meaning of this ?
+    bool need_to_draw = true; // TODO What is the meaning of this ?
 
-    bool need_to_update_char_view;
+    bool need_to_update_char_view = true;
 };

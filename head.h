@@ -82,10 +82,11 @@ using std::wstring;
 using std::vector;
 using std::array;
 using std::list;
+using isize = size_t;
 
 // Conflict with windows, not used here
 #ifdef _env_linux
-typedef int8_t byte;
+using byte = int8_t;
 #endif
 
 typedef wchar_t uchar;
@@ -150,18 +151,18 @@ inline bool approxEqual(double a, double b)
 }
 
 template <typename EleType>
-inline size_t len(const vector<EleType>& container)
+inline isize len(const vector<EleType>& container)
 {
     return container.size();
 }
 
 template <typename EleType>
-inline size_t len(const list<EleType>& container)
+inline isize len(const list<EleType>& container)
 {
     return container.size();
 }
 
-inline size_t len(const string& s)
+inline isize len(const string& s)
 {
     return s.size();
 }
@@ -172,7 +173,7 @@ inline string str(wchar_t w_char)
     return string(w_char_str.begin(), w_char_str.end());
 }
 
-inline string repeatStr(const string& s, size_t times)
+inline string repeatStr(const string& s, isize times)
 {
     string result;
     result.reserve(len(s) * times);

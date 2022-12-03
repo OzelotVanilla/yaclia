@@ -1,4 +1,5 @@
 #include "ViewManager.h"
+#include "../instance/YacliaMainMenu.h"
 
 
 
@@ -30,6 +31,8 @@ ViewManager& ViewManager::draw()
 
         // Draw top screen
         this->getActiveScreen().draw();
+
+        this->need_to_draw = false;
     }
 
     // If use printf, force console to show, do not be lazy.
@@ -67,6 +70,7 @@ ViewManager& ViewManager::start()
     prepareConsole();
     moveCursorTo(0, 0);
     hideCursor();
+    this->main_process_can_run = true;
 
     return *this;
 }
@@ -74,6 +78,7 @@ ViewManager& ViewManager::start()
 
 ViewManager& ViewManager::end()
 {
+    this->main_process_can_run = false;
     showCursor();
     restoreConsole();
     backFromAlternativeScreen();
@@ -97,7 +102,7 @@ ViewManager& ViewManager::processInput()
 }
 
 
-ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
+ViewManager& ViewManager::handleInput(const ProcessedKeyInput& data)
 {
     // If this is directly affecting view manager.
     if (this->input_handlers->contains(data))
@@ -106,13 +111,41 @@ ViewManager& ViewManager::handleInput(ProcessedKeyInput data)
     }
 
     // Else, send it to active screen.
+    else { this->getActiveScreen().handleInput(data); }
 
+    return *this;
+}
+
+
+ViewManager& ViewManager::showMenu()
+{
+    if (not this->showing_menu)
+    {
+        this->getActiveScreen().addWindow(&view_manager_menu);
+        this->showing_menu = true;
+    }
+    return *this;
+}
+
+
+ViewManager& ViewManager::closeMenu()
+{
+    if (this->showing_menu)
+    {
+        this->getActiveScreen().deleteWindow(&view_manager_menu);
+        this->showing_menu = false;
+    }
     return *this;
 }
 
 
 /* virtual */ void ViewManager::updateFromNotification(const NotificationDict& info)
 {
+    if (info.contains("view_manager_control"))
+    {
+        const let action = info.at("view_manager_control");
+        if (action == "end") { this->end(); }
+    }
     if (dictCheckEqual(info, "redraw", "true")) { this->need_to_draw = true; }
 }
 
@@ -132,13 +165,6 @@ void ViewManager::checkAndUpdateConsoleInfo()
 void ViewManager::handleSignal()
 {
 }
-
-
-void showViewManagerMenu(ViewManager* v)
-{
-    v->getActiveScreen().addWindow(&view_manager_menu);
-}
-
 
 
 ViewManager::constructor()

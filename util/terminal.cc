@@ -17,9 +17,9 @@ CursorPosition getCursorPosition()
 void moveCursorTo(int from_left, int from_top)
 {
     char buffer[20];
-    buffer[0]    = '\033';
-    buffer[1]    = '[';
-    size_t index = 2;
+    buffer[0]   = '\033';
+    buffer[1]   = '[';
+    isize index = 2;
 
     // Manually converting to raise speed
     // Index value need to plus one to fit ANSI escape sequence

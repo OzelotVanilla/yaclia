@@ -142,7 +142,7 @@ template <>
 class hash<ProcessedKeyInput>
 {
   public:
-    size_t operator()(const ProcessedKeyInput& key_input) const
+    isize operator()(const ProcessedKeyInput& key_input) const
     {
         return hash<int>()(int(key_input.key)) ^ hash<int>()(int(key_input.modifier));
     }
@@ -153,6 +153,7 @@ class hash<ProcessedKeyInput>
 enum class key_input_namesp::KbdChar
 {
     invalid = -1,
+    tab     = 9,
     enter   = 13,
     esc     = 27,
     space   = 32,

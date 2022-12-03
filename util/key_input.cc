@@ -33,7 +33,7 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
         // printf("\b\r\n");
 
 
-        for (size_t i = 0; i < length_readed; i++)
+        for (isize i = 0; i < length_readed; i++)
         {
             // If there is a modifier such as alt.
             if (has_previous_seq)
@@ -54,8 +54,14 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
                     case 3: // Arrow key, `27 91 65~68`.
                         if (buffer[i] == 91)
                         {
-                            key_input = { KbdChar(int(KbdChar::arrow_up) + (buffer[i + 1] - 65)),
-                                          KbdModifier::none };
+                            const let second_code = isize(buffer[i + 1]);
+                            if (second_code >= 65 and second_code <= 68)
+                            {
+                                key_input = { KbdChar(int(KbdChar::arrow_up) + (buffer[i + 1] - 65)),
+                                              KbdModifier::none };
+                            }
+                            else if (second_code == 90) { key_input = { KbdChar::tab, KbdModifier::none }; }
+                            else { throw UnknownKeyInputSeq("27 91 " + parseString(second_code)); }
                         }
                         else { throw UnknownKeyInputSeq("27 " + parseString(buffer[i]) + " " + parseString(buffer[++i])); }
                         break;
@@ -152,7 +158,7 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
 #elif _env_windows
         // Since it is only possible to give one at a time, if more than one, it should be warning
         // Refer to: https://learn.microsoft.com/ja-jp/windows/console/key-event-record-str
-        for (size_t i = 0; i < key_input_namesp::num_readed; i++)
+        for (isize i = 0; i < key_input_namesp::num_readed; i++)
         {
             // cout << std::bitset<32>(int(irInBuf[i].Event.KeyEvent.dwControlKeyState)).to_string()
             //      << ", with char " << irInBuf[i].Event.KeyEvent.uChar.AsciiChar

@@ -15,7 +15,7 @@
         const let from_left = this->draw_info.position_from_left;
         const let from_top  = this->draw_info.position_from_top;
 
-        size_t i = 0;
+        isize i = 0;
         for (; i < len(this->draw_info.char_view); i++)
         {
             moveCursorTo(from_left, from_top + i);
@@ -79,6 +79,8 @@ void Window::updateCharView()
     }
 
     // Draw the layout inside
+
+    this->need_to_draw = true;
 }
 
 
@@ -89,8 +91,17 @@ Window& Window::moveTo(int from_left, int from_top)
     return *this;
 }
 
+/* virtual */ void Window::handleInput(const ProcessedKeyInput& key_input)
+{
+    // If it is for this window.
 
-/* virtual */ void Window::notifySubsriber(const NotificationDict& info) { }
+    // Else give active field.
+}
+
+
+/* virtual */ void Window::notifySubsriber(const NotificationDict& info)
+{
+}
 
 
 string Window::drawTitleLine() const
@@ -127,7 +138,7 @@ string Window::drawTitleLine() const
         this->window_style.has_title and (need_draw_status_icon ? width >= 11 : width >= 7);
 
     // If there is only 1 char for title, it is '…'
-    const size_t width_for_max_title_text =
+    const isize width_for_max_title_text =
         need_draw_title
             ? width - (need_draw_status_icon ? 10 : 6)
             : 0;
@@ -139,7 +150,7 @@ string Window::drawTitleLine() const
                    ? (this->title.substr(0, width_for_title_text - 1) + "…")
                    : this->title
              : "";
-    const size_t width_for_title =
+    const isize width_for_title =
         need_draw_title
             ? width_for_title_text + 2
             : 0;
@@ -225,6 +236,5 @@ Window::constructor(int width, int height, int top_offset, int left_offset)
 
     const let char_view_length = this->window_style.has_focus_frame_shadow ? height + 1 : height;
     this->draw_info.char_view  = vector<string>(char_view_length);
-
-    this->layouts = new vector<Field*>();
+    this->main_layout          = FieldLayout();
 }

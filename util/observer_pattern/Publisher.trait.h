@@ -14,13 +14,19 @@
 class Publisher
 {
   public:
-    virtual void notifySubsriber(const NotificationDict& info) = 0;
+    virtual void notifySubsriber(const NotificationDict& info)
+    {
+        forEach(
+            *this->subscribers,
+            (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); })
+        );
+    }
 
     virtual void addSubscriber(Subscriber* s)
     {
         let index = indexOfFirst(
             *this->subscribers,
-            (function<bool(Subscriber*)>)(lambda_ref(Subscriber * subscriber) { return size_t(subscriber) == size_t(s); })
+            (function<bool(Subscriber*)>)(lambda_ref(Subscriber * subscriber) { return isize(subscriber) == isize(s); })
         );
 
         // Add only if not exist.
@@ -34,7 +40,7 @@ class Publisher
     {
         let index = indexOfFirst(
             *this->subscribers,
-            (function<bool(Subscriber*)>)(lambda_ref(Subscriber * subscriber) { return size_t(subscriber) == size_t(s); })
+            (function<bool(Subscriber*)>)(lambda_ref(Subscriber * subscriber) { return isize(subscriber) == isize(s); })
         );
 
         // If exist

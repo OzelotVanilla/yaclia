@@ -2,7 +2,7 @@
 
 #include "../../head.h"
 #include "../container/Screen.h"
-#include "../container/Window.h"
+#include "../container/VerticalScrollSelectField.h"
 #include "../../util/terminal.h"
 #include "../../system/sys_call.h"
 #include "../../util/key_input.h"
@@ -43,6 +43,9 @@ class ViewManager : public Subscriber
     ViewManager& popScreen();
     Screen&      getActiveScreen();
 
+    ViewManager& showMenu();
+    ViewManager& closeMenu();
+
     int getConsoleLines();
     int getConsoleColumns();
 
@@ -61,7 +64,7 @@ class ViewManager : public Subscriber
     void handleSignal();
 
     ViewManager& processInput();
-    ViewManager& handleInput(ProcessedKeyInput data);
+    ViewManager& handleInput(const ProcessedKeyInput& data);
 
     ViewManager& updateConsoleRelatedInfo();
 
@@ -87,17 +90,18 @@ class ViewManager : public Subscriber
 
 static ViewManager view_manager = ViewManager();
 
-static Window view_manager_menu =
-    Window::createSized(
-        terminal_namesp::current_console_status.width - 4,
-        terminal_namesp::current_console_status.height - 4
-    )
-        .setTitle("Yaclia Menu")
-        .setId("view_manager_menu")
-        .moveTo(2, 1);
 
-void showViewManagerMenu(ViewManager* v);
-void closeViewManagerMenu(ViewManager* v);
+inline void showViewManagerMenu(ViewManager* v)
+{
+    v->showMenu();
+}
+
+
+inline void closeViewManagerMenu(ViewManager* v)
+{
+    v->closeMenu();
+}
+
 
 class NoScreenToShowError : public std::exception
 {
