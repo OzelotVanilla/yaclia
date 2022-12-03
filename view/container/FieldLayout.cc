@@ -10,5 +10,4 @@ FieldLayout::constructor()
 FieldLayout::constructor(FieldLayoutDirection d)
 {
     this->direction = d;
-    this->fields    = new vector<Field*>();
 }

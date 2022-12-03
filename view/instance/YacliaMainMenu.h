@@ -12,4 +12,5 @@ static Window view_manager_menu =
     )
         .setTitle("Yaclia Menu")
         .setId("view_manager_menu")
-        .moveTo(4, 1);
+        .moveTo(4, 1)
+        .addField(&view_manager_menu_items);

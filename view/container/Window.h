@@ -7,7 +7,7 @@
 #include "WindowStatusIcon.h"
 #include "WindowFrameStyle.h"
 #include "Field.h"
-#include "FieldLayout.h"
+#include "FieldContainer.h"
 
 #ifdef constructor
 #undef constructor
@@ -16,7 +16,7 @@
 #define constructor Window
 
 
-class Window : public ViewContainer, public Publisher
+class Window : public ViewContainer, virtual public Publisher, virtual public Subscriber
 {
   public:
     virtual void draw();
@@ -25,7 +25,10 @@ class Window : public ViewContainer, public Publisher
 
     virtual void handleInput(const ProcessedKeyInput& key_input);
 
-    virtual void notifySubsriber(const NotificationDict& info);
+    Window& addField(Field* f);
+
+    // /* This use the simple iter version */ virtual void notifySubsriber(const NotificationDict& info);
+    virtual void updateFromNotification(const NotificationDict& info);
 
     Window&        moveTo(int from_left, int from_top);
     inline Window& putInPlace(int from_left, int from_top)
@@ -61,7 +64,7 @@ class Window : public ViewContainer, public Publisher
   private:
     WindowFrameStyle window_style;
 
-    FieldLayout main_layout;
+    FieldContainer field_container;
 
     string title       = "";
     string status_icon = " ";

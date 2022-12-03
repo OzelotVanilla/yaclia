@@ -15,12 +15,8 @@ enum class FieldLayoutDirection;
 class FieldLayout
 {
   public:
-  private:
     FieldLayoutDirection direction;
 
-    vector<Field*>* fields;
-
-    vector<FieldLayout>* sub_layouts;
 
   public:
     constructor();

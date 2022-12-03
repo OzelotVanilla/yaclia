@@ -82,7 +82,18 @@ using std::wstring;
 using std::vector;
 using std::array;
 using std::list;
-using isize = size_t;
+using i8    = int8_t;
+using i32   = int32_t;
+using i64   = int64_t;
+using isize = ssize_t;
+using usize = size_t;
+using f32   = _Float32;
+using f64   = _Float64;
+
+inline isize operator"" _isize(unsigned long long n)
+{
+    return isize(n);
+}
 
 // Conflict with windows, not used here
 #ifdef _env_linux

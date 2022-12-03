@@ -22,9 +22,9 @@ void Screen::draw()
         for (; line_index < size_vert; line_index++)
         {
             moveCursorTo(from_left, from_top + line_index);
-            printf("%s\r\n", this->draw_info.char_view[line_index].c_str());
+            printStdout("%s", this->draw_info.char_view[line_index].c_str());
         }
-        flushOutputToConsole();
+        moveCursorTo(0, 0);
 
         // Until next change, like changing background, or some refresh
         this->need_to_draw = false;

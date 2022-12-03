@@ -22,6 +22,9 @@
             printf("%s\r\n", this->draw_info.char_view[i].c_str());
         }
         flushOutputToConsole();
+
+        // Draw all fields
+        this->field_container.draw();
         this->need_to_draw = false;
     }
 }
@@ -79,6 +82,7 @@ void Window::updateCharView()
     }
 
     // Draw the layout inside
+    this->field_container.draw();
 
     this->need_to_draw = true;
 }
@@ -99,7 +103,14 @@ Window& Window::moveTo(int from_left, int from_top)
 }
 
 
-/* virtual */ void Window::notifySubsriber(const NotificationDict& info)
+Window& Window::addField(Field* f)
+{
+    this->field_container.addField(f);
+    return *this;
+}
+
+
+/* virtual */ void Window::updateFromNotification(const NotificationDict& info)
 {
 }
 
@@ -236,5 +247,5 @@ Window::constructor(int width, int height, int top_offset, int left_offset)
 
     const let char_view_length = this->window_style.has_focus_frame_shadow ? height + 1 : height;
     this->draw_info.char_view  = vector<string>(char_view_length);
-    this->main_layout          = FieldLayout();
+    this->field_container      = FieldContainer();
 }

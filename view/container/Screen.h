@@ -19,7 +19,7 @@
  *
  * It will hold several `Window`.
  */
-class Screen : public ViewContainer, public Publisher, public Subscriber
+class Screen : public ViewContainer, public virtual Publisher, public virtual Subscriber
 {
   public:
     Screen& pushInWindow(Window* w);

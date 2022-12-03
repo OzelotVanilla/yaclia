@@ -18,12 +18,19 @@ class VerticalScrollSelectField : public Field
     virtual void updateFromNotification(const NotificationDict& info);
     virtual void handleInput(const ProcessedKeyInput& key_input);
 
+    VerticalScrollSelectField& setHasFrame(bool has_frame);
+
+
   protected:
     vector<string> items;
 
     isize num_selected = 0;
 
     isize position_selected = 0;
+
+    isize max_item_to_show;
+
+    bool has_frame = true;
 
   public:
     static VerticalScrollSelectField createSized(isize line_to_show);
