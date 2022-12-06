@@ -69,6 +69,14 @@ void Focusable::onExitFocus()
     this->focused = false;
 }
 
+NotificationDict Focusable::handleInput(const ProcessedKeyInput& key_input)
+{
+    if (this->currentFocusedSubFocusable != NULL)
+    {
+        this->currentFocusedSubFocusable->handleInput(key_input);
+    }
+}
+
 Focusable::~constructor()
 {
     if (this->focusLevel != 0)

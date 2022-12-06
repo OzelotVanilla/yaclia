@@ -42,5 +42,7 @@ class Focusable : public ViewContainer
 
     virtual void onExitFocus();
 
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input) = 0;
+
     ~constructor();
 };

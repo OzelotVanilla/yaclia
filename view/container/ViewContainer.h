@@ -34,8 +34,6 @@
 
     virtual void updateCharView() = 0;
 
-    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input) = 0;
-
     //   private:
     // virtual void updateConsoleRelatedInfo() = 0;
 
