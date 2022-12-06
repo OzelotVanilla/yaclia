@@ -125,8 +125,10 @@ bool key_input_namesp::getAndWriteKeyInputToBuffer(KeyInputBuffer& key_input_buf
                 // If a `ctrl + alphabet` or a enter.
                 if (buffer[i] <= 26)
                 {
-                    // But it can be a enter.
-                    if (buffer[i] == 13) { key_input = { KbdChar::enter, KbdModifier::none }; }
+                    // But it can be a `tab`.
+                    if (buffer[i] == 9) { key_input = { KbdChar::tab, KbdModifier::none }; }
+                    // Or a `enter`.
+                    else if (buffer[i] == 13) { key_input = { KbdChar::enter, KbdModifier::none }; }
 
                     // Or it is a `ctrl + alphabet`, remember `ctrl + a` is `1` not `0`.
                     // Because `0` for `ctrl + space`.
