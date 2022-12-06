@@ -69,8 +69,14 @@ class VerticalScrollSelectField : public Field, virtual public Publisher
   protected:
     vector<ItemShowing> items;
 
+    /**
+     * The selected item number of index in the items vector.
+     */
     isize num_selected = 0;
 
+    /**
+     * The selected item position in the scroll view.
+     */
     isize position_selected = 0;
 
     isize max_item_to_show;

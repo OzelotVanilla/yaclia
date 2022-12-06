@@ -13,17 +13,17 @@ static VerticalScrollSelectField view_manager_menu_items =
         .addItem("Item 3")
         .addItem("Item 4")
         .addItem("Item 5")
-        .addItem("Item 6")
+        .addItem("Quit", new string("window_close"))
         .setId("view_manager_menu_items");
 
-static Window view_manager_menu =
-    Window(
-        terminal_namesp::current_console_status.width - 8,
-        terminal_namesp::current_console_status.height - 4,
-        1,
-        1
-    )
-        .setTitle("Yaclia Menu")
-        .setId("view_manager_menu")
-        .moveTo(4, 1)
-        .addField(&view_manager_menu_items);
+static Window* view_manager_menu =
+    &((new Window(
+           terminal_namesp::current_console_status.width - 8,
+           terminal_namesp::current_console_status.height - 4,
+           1,
+           1
+       ))
+          ->setTitle("Yaclia Menu")
+          .setId("view_manager_menu")
+          .moveTo(4, 1)
+          .addField(&view_manager_menu_items));

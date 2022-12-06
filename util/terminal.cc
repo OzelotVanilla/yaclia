@@ -28,9 +28,10 @@ void moveCursorTo(int from_left, int from_top)
     buffer[index++] = ';';
     sprintf(&buffer[index], "%d", ++from_left);
     for (; buffer[index] != '\0'; index++) { }
-    buffer[index] = 'H';
+    buffer[index++] = 'H';
+    // buffer[index]   = '\0';
 
-    writeStdout(buffer);
+    writeStdout(buffer, index);
 }
 
 

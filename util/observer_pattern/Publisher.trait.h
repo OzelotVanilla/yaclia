@@ -16,10 +16,15 @@ class Publisher
   public:
     virtual void notifySubsriber(const NotificationDict& info)
     {
-        forEach(
-            *this->subscribers,
-            (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); })
-        );
+        // forEach(
+        //     *this->subscribers,
+        //     (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); })
+        // );
+
+        for (size_t i = 0; i < len(*this->subscribers); i++)
+        {
+            this->subscribers->at(i)->updateFromNotification(info);
+        }
     }
 
     virtual void addSubscriber(Subscriber* s)

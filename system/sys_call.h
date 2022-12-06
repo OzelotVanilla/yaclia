@@ -178,15 +178,23 @@ inline void printStdout(const string& format_str, ...)
 }
 
 
-inline void writeStdout(const char* str)
+inline void writeStdout(const char* str, int length_to_write)
 {
-    stdio::write(stdio::stdout_fd, str, sizeof(str));
+    stdio::write(stdio::stdout_fd, str, length_to_write);
 }
 
 
 inline void writeStdout(const string& str)
 {
-    stdio::write(stdio::stdout_fd, str.c_str(), sizeof(str));
+    writeStdout(str.c_str());
+}
+
+
+inline void writeStdout(const char* str)
+{
+    int length_to_write = 0;
+    while (str[length_to_write] != '\0') { length_to_write++; }
+    writeStdout(str, length_to_write);
 }
 
 

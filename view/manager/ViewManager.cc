@@ -130,7 +130,7 @@ ViewManager& ViewManager::showMenu()
 {
     if (not this->showing_menu)
     {
-        this->getActiveScreen().addWindow(&view_manager_menu);
+        this->getActiveScreen().addWindow(view_manager_menu);
         this->showing_menu = true;
     }
     return *this;
@@ -156,6 +156,7 @@ ViewManager& ViewManager::showMenu()
         if (action == "end") { this->end(); }
     }
     if (dictCheckEqual(info, "redraw", "true")) { this->need_to_draw = true; }
+    if (dictCheckEqual(info, "menu_close", "true")) { this->showing_menu = false; }
 }
 
 

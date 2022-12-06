@@ -44,6 +44,12 @@ class Window : public ViewContainer, virtual public Publisher, virtual public Su
         return *this;
     }
 
+    Window& refresh()
+    {
+        this->need_to_update_char_view = true;
+        return *this;
+    }
+
     const string& getId() const
     {
         return this->id;
@@ -64,7 +70,7 @@ class Window : public ViewContainer, virtual public Publisher, virtual public Su
   private:
     WindowFrameStyle window_style;
 
-    FieldContainer field_container;
+    FieldContainer* field_container;
 
     string title       = "";
     string status_icon = " ";

@@ -23,4 +23,7 @@ class Subscriber
 {
   public:
     virtual void updateFromNotification(const NotificationDict& info) = 0;
+
+  protected:
+    NotificationDict* test = new NotificationDict();
 };

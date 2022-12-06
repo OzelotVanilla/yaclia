@@ -157,7 +157,7 @@
 
 /* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::addItem(string text)
 {
-    return this->addItem(text, &text);
+    return this->addItem(text, nullptr);
 }
 
 
@@ -196,6 +196,7 @@
     if (this->position_selected > 0)
     {
         this->position_selected--;
+        this->num_selected--;
         this->need_to_update_char_view = true;
         this->notifySubsriber({ { "redraw", "true" } });
     }
@@ -205,9 +206,11 @@
 
 /* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::selectScrollDown()
 {
-    if (this->position_selected < this->max_item_to_show - 1)
+    const let position_selected = this->position_selected;
+    if (position_selected < this->max_item_to_show - 1 and position_selected < this->items.size() - 1)
     {
         this->position_selected++;
+        this->num_selected++;
         this->need_to_update_char_view = true;
         this->notifySubsriber({ { "redraw", "true" } });
     }
@@ -217,9 +220,11 @@
 
 /* virtual */ string VerticalScrollSelectField::selectCurrentItem()
 {
-    return *this->items.at(this->num_selected).value_retuned;
+    const let selected_item = this->items.at(this->num_selected);
+    const let v_ptr         = selected_item.value_retuned;
+    if (v_ptr != nullptr) { return *v_ptr; }
+    else { return selected_item.display_text; }
 }
-
 
 
 // template <typename ItemCallbackFunction>

@@ -84,8 +84,8 @@ void Screen::updateConsoleRelatedInfo()
 
 Screen& Screen::pushInWindow(Window* w)
 {
-    this->window_binded->push_back(w);
     w->addSubscriber(this);
+    this->window_binded->push_back(w);
     this->need_to_update_char_view = true;
     this->notifySubsriber({ { "redraw", "true" } });
     return *this;
@@ -131,11 +131,33 @@ Screen& Screen::setBackgroundChar(uchar c)
     if (info.contains("window_close"))
     {
         const let& win_to_close_id = info.at("window_close");
-        indexOfFirst(
+
+        let win_to_close_idx = indexOfFirst(
             *this->window_binded,
             (std::function<bool(Window*)>)
                 lambda_ref(Window * w_pointer) { return w_pointer->getId() == win_to_close_id; }
         );
+        bool is_yaclia_menu = false;
+        if (win_to_close_idx >= 0)
+        {
+            let window = this->window_binded->at(win_to_close_idx);
+            if (window->getId() == "view_manager_menu")
+            {
+                is_yaclia_menu = true;
+            }
+            window->refresh(); // When it is going to be deleted, next time when show, update char view first
+            std::swap(window, this->window_binded->at(this->window_binded->size() - 1));
+            this->window_binded->pop_back();
+        }
+        if (is_yaclia_menu)
+        {
+            this->notifySubsriber({ { "redraw", "true" }, { "menu_close", "true" } });
+        }
+        else
+        {
+            this->notifySubsriber({ { "redraw", "true" } });
+        }
+        this->need_to_draw = true;
     }
     if (dictCheckEqual(info, "redraw", "true")) { this->notifySubsriber({ { "redraw", "true" } }); }
 }
