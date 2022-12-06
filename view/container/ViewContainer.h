@@ -4,6 +4,7 @@
 #include "../../system/signal/signal.h"
 #include "ViewDrawInfo.h"
 #include "../../util/key_input.h"
+#include "../../util/observer_pattern/Subscriber.trait.h"
 
 #ifdef constructor
 #undef constructor
@@ -33,7 +34,7 @@
 
     virtual void updateCharView() = 0;
 
-    virtual void handleInput(const ProcessedKeyInput& key_input) = 0;
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input) = 0;
 
     //   private:
     // virtual void updateConsoleRelatedInfo() = 0;

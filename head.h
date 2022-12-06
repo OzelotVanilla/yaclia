@@ -16,6 +16,7 @@
 
 #include <cmath>
 #include <functional>
+#include <type_traits>
 #include <random>
 #include <time.h>
 
@@ -228,3 +229,34 @@ inline void forEach(const std::vector<EleType>& container, function<void(EleType
 {
     for_each(container.begin(), container.end(), action);
 }
+
+template <typename EleType>
+inline void deleteIfExist(vector<EleType>& vector_to_find, const EleType& element_to_find)
+{
+    isize index;
+    do
+    {
+        index = indexOfFirst(vector_to_find, element_to_find);
+        if (index >= 0) { vector_to_find.erase(index); }
+        else { break; }
+    } while (true);
+}
+
+// template <typename EleType, typename Checker>
+// inline void deleteIfExist(vector<EleType>& vector_to_find, Checker checker)
+// {
+//     using CheckerType = bool (*)(EleType);
+//     static_assert(
+//         std::is_assignable<CheckerType&, decltype(checker)>::value == true,
+//         "This checker function is invalid. Requiring `EleType -> bool`."
+//     );
+//     function<bool(EleType)> f_checker = checker;
+
+//     isize index;
+//     do
+//     {
+//         index = indexOfFirst(vector_to_find, f_checker);
+//         if (index >= 0) { vector_to_find.erase(vector_to_find.begin() + index); }
+//         else { break; }
+//     } while (true);
+// }

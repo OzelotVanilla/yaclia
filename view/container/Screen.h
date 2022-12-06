@@ -46,7 +46,7 @@ class Screen : public ViewContainer, public virtual Publisher, public virtual Su
 
     virtual void updateConsoleRelatedInfo();
 
-    virtual void handleInput(const ProcessedKeyInput& key_input);
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input);
 
     Screen& setId(string new_id)
     {

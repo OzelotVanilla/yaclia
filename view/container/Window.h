@@ -23,7 +23,7 @@ class Window : public ViewContainer, virtual public Publisher, virtual public Su
     virtual void updateCharView();
     virtual void updateConsoleRelatedInfo();
 
-    virtual void handleInput(const ProcessedKeyInput& key_input);
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input);
 
     Window& addField(Field* f);
 

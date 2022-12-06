@@ -22,9 +22,11 @@ class FieldContainer : public Field, public virtual Subscriber, public virtual P
 
     virtual void updateCharView();
 
-    virtual void handleInput(const ProcessedKeyInput& key_input);
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input);
 
     FieldContainer& addField(Field* f);
+
+    FieldContainer& moveTo(isize from_left, isize from_top);
 
   public:
     // /* This use the simple iter version */ virtual void notifySubsriber(const NotificationDict& info);
@@ -35,6 +37,12 @@ class FieldContainer : public Field, public virtual Subscriber, public virtual P
 
     vector<Field*>* fields;
 
+    Field* active_field;
+
+  public:
+    static FieldContainer createSized(int width, int height);
+
   public:
     constructor();
+    constructor(int width, int height);
 };

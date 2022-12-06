@@ -3,16 +3,26 @@
 
 /* virtual */ void VerticalScrollSelectField::draw()
 {
-    this->updateCharView();
-    const let from_left = this->draw_info.position_from_left;
-    const let from_top  = this->draw_info.position_from_top;
-
-    for (isize i = 0; i < len(this->draw_info.char_view); i++)
+    if (this->need_to_update_char_view)
     {
-        moveCursorTo(from_left, from_top + i);
-        printf("%s\r\n", this->draw_info.char_view[i].c_str());
+        this->updateCharView();
+        this->need_to_draw = true;
     }
-    flushOutputToConsole();
+
+    if (this->need_to_draw)
+    {
+        const let from_left = this->draw_info.position_from_left;
+        const let from_top  = this->draw_info.position_from_top;
+
+        for (isize i = 0; i < len(this->draw_info.char_view); i++)
+        {
+            moveCursorTo(from_left, from_top + i);
+            printf("%s\r\n", this->draw_info.char_view[i].c_str());
+        }
+        flushOutputToConsole();
+
+        this->need_to_draw = false;
+    }
 }
 
 
@@ -48,27 +58,54 @@
         {
             isize line_index = 0;
 
-            this->draw_info.char_view[line_index] = "┌" + repeatStr("─", width - 2) + "┐";
+            this->draw_info.char_view[line_index++] = "┌" + repeatStr("─", width - 2) + "┐";
             for (; line_index < height - 2; line_index++)
             {
-                let text = this->items.at(first_line_index + line_index - 1);
+                // If there is element in the array
+                const let pos_in_array = first_line_index + line_index - 1;
+                if (pos_in_array < len(this->items))
+                {
+                    let text = this->items.at(pos_in_array).display_text;
 
-                if (len(text) > max_width_for_text) { text = text.substr(0, max_width_for_text - 1) + "…"; }
+                    let space_remain = max_width_for_text - len(text);
 
-                this->draw_info.char_view[line_index] = "│" + text + "│";
+                    if (space_remain < 0) { text = text.substr(0, max_width_for_text - 1) + "…"; }
+
+                    this->draw_info.char_view[line_index] = "│" + text + string(space_remain, ' ') + "│";
+                }
+                else
+                {
+                    this->draw_info.char_view[line_index] = "│" + repeatStr(" ", width - 2) + "│";
+                }
             }
+
+
             this->draw_info.char_view[line_index] = "└" + repeatStr("─", width - 2) + "┘";
         }
         else
         {
             for (isize line_index = 0; line_index < height; line_index++)
             {
-                let text = this->items.at(first_line_index + line_index);
+                let text = this->items.at(first_line_index + line_index).display_text;
 
                 if (len(text) > max_width_for_text) { text = text.substr(0, max_width_for_text - 1) + "…"; }
 
                 this->draw_info.char_view[line_index] = text;
             }
+        }
+
+        // Highlight selected
+        {
+            let& origin_str =
+                (this->draw_info.char_view.at(this->num_selected + (has_frame ? 1 : 0)));
+            let text_to_highlight =
+                has_frame
+                    ? origin_str.substr(3, origin_str.size() - 6) // Notice the vbar is a utf-8, substr index changes.
+                    : origin_str;
+            origin_str =
+                has_frame
+                    ? "|\e[38;2;0;148;200m" + text_to_highlight + "\e[0m|"
+                    : "\e[48;2;125;125;125m" + text_to_highlight + "\e[0m";
         }
     }
     else // No item
@@ -81,6 +118,8 @@
             "\e[38;2;236;109;113m\e[3m" + text + "\e[0m"
         );
     }
+
+    this->need_to_update_char_view = false;
 }
 
 
@@ -89,9 +128,103 @@
 }
 
 
-/* virtual */ void VerticalScrollSelectField::handleInput(const ProcessedKeyInput& key_input)
+/* virtual */ NotificationDict VerticalScrollSelectField::handleInput(const ProcessedKeyInput& key_input)
 {
+    // If it is plain control sequence like `arrow_up` or `enter`
+    if (key_input.modifier == KbdModifier::none)
+    {
+        switch (key_input.key)
+        {
+        case KbdChar::enter:
+            return { { "value", this->selectCurrentItem() } };
+
+        case KbdChar::arrow_up:
+            this->selectScrollUp();
+            return {};
+
+        case KbdChar::arrow_down:
+            this->selectScrollDown();
+            return {};
+
+        default:
+            return { { "unhandled_input", parseString(int(key_input.modifier)) + ":" + parseString(int(key_input.key)) } };
+        }
+    }
+
+    return {};
 }
+
+
+/* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::addItem(string text)
+{
+    return this->addItem(text, &text);
+}
+
+
+/* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::addItem(string display_text, string* value_returned)
+{
+    this->items.push_back(ItemShowing(display_text, value_returned));
+    this->need_to_update_char_view = true;
+    return *this;
+}
+
+
+/* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::VerticalScrollSelectField::deleteItem(string display_text)
+{
+    // let checker = lambda_ref(ItemShowing i)
+    // {
+    //     return i.display_text == display_text;
+    // };
+    // deleteIfExist(this->items, checker);
+
+    for (isize i = 0; i < len(this->items); i++)
+    {
+        if (this->items.at(i).display_text == display_text)
+        {
+            this->items.erase(this->items.begin() + i);
+            break;
+        }
+    }
+
+    this->need_to_update_char_view = true;
+    return *this;
+}
+
+
+/* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::selectScrollUp()
+{
+    if (this->position_selected > 0)
+    {
+        this->position_selected--;
+        this->need_to_update_char_view = true;
+    }
+    return *this;
+}
+
+
+/* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::selectScrollDown()
+{
+    if (this->position_selected < this->max_item_to_show - 1)
+    {
+        this->position_selected++;
+        this->need_to_update_char_view = true;
+    }
+    return *this;
+}
+
+
+/* virtual */ string VerticalScrollSelectField::selectCurrentItem()
+{
+    return *this->items.at(this->num_selected).value_retuned;
+}
+
+
+
+// template <typename ItemCallbackFunction>
+// VerticalScrollSelectField& VerticalScrollSelectField::addItem(string name, ItemCallbackFunction callback)
+// {
+//     static_assert(std::is_assignable<function<string(void)>, ItemCallbackFunction>::value, "!");
+// }
 
 
 VerticalScrollSelectField& VerticalScrollSelectField::setHasFrame(bool has_frame)
@@ -124,9 +257,9 @@ VerticalScrollSelectField& VerticalScrollSelectField::setHasFrame(bool has_frame
 {
     let field = VerticalScrollSelectField(init_items);
 
-    field.draw_info.size_vertical = line_to_show + 2;
-    field.draw_info.char_view     = vector<string>(line_to_show, "");
-    field.max_item_to_show        = line_to_show;
+    // field.draw_info.size_vertical = line_to_show + 2;
+    field.draw_info.char_view = vector<string>(line_to_show, "");
+    field.max_item_to_show    = line_to_show;
 
     return std::move(field);
 }
@@ -140,5 +273,12 @@ VerticalScrollSelectField::constructor()
 
 VerticalScrollSelectField::constructor(const vector<string> init_items)
 {
-    this->items = init_items;
+    this->items.reserve(len(init_items));
+    for (const string& s : init_items)
+    {
+        let item = ItemShowing(s, nullptr);
+
+        item.value_retuned = &item.display_text;
+        this->items.push_back(item);
+    }
 }

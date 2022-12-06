@@ -3,7 +3,15 @@
 #include "../container/Window.h"
 
 static VerticalScrollSelectField view_manager_menu_items =
-    VerticalScrollSelectField::createSized(terminal_namesp::current_console_status.height - 6);
+    VerticalScrollSelectField::createSized(
+        terminal_namesp::current_console_status.height - 6
+    )
+        .addItem("Item 1")
+        .addItem("Item 2")
+        .addItem("Item 3")
+        .addItem("Item 4")
+        .addItem("Item 5")
+        .addItem("Item 6");
 
 static Window view_manager_menu =
     Window::createSized(

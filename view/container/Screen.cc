@@ -67,15 +67,18 @@ void Screen::updateConsoleRelatedInfo()
 }
 
 
-/* virtual */ void Screen::handleInput(const ProcessedKeyInput& key_input)
+/* virtual */ NotificationDict Screen::handleInput(const ProcessedKeyInput& key_input)
 {
     // If it is for this screen.
+
 
     // Else give active window.
     if (len(*this->window_binded) > 0)
     {
-        this->getActiveWindow().handleInput(key_input);
+        return this->getActiveWindow().handleInput(key_input);
     }
+
+    return {};
 }
 
 

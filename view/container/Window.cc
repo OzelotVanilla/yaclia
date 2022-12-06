@@ -22,12 +22,13 @@
             printf("%s\r\n", this->draw_info.char_view[i].c_str());
         }
         flushOutputToConsole();
-
-        // Draw all fields
-        this->field_container.draw();
-        this->need_to_draw = false;
     }
+
+    // Draw all fields
+    this->field_container.draw();
+    this->need_to_draw = false;
 }
+
 
 
 Window& Window::setTitle(string title)
@@ -81,8 +82,8 @@ void Window::updateCharView()
         }
     }
 
-    // Draw the layout inside
-    this->field_container.draw();
+    // Draw the layout inside ? Why here.
+    this->field_container.updateCharView();
 
     this->need_to_draw = true;
 }
@@ -92,14 +93,16 @@ Window& Window::moveTo(int from_left, int from_top)
 {
     this->draw_info.position_from_left = from_left;
     this->draw_info.position_from_top  = from_top;
+    this->field_container.moveTo(from_left + 1, from_top + 1);
     return *this;
 }
 
-/* virtual */ void Window::handleInput(const ProcessedKeyInput& key_input)
+/* virtual */ NotificationDict Window::handleInput(const ProcessedKeyInput& key_input)
 {
     // If it is for this window.
 
     // Else give active field.
+    return this->field_container.handleInput(key_input);
 }
 
 
@@ -247,5 +250,6 @@ Window::constructor(int width, int height, int top_offset, int left_offset)
 
     const let char_view_length = this->window_style.has_focus_frame_shadow ? height + 1 : height;
     this->draw_info.char_view  = vector<string>(char_view_length);
-    this->field_container      = FieldContainer();
+    this->field_container      = FieldContainer::createSized(width - 2, height - 2);
+    this->field_container.moveTo(left_offset + 1, top_offset + 1);
 }
