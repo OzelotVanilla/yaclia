@@ -107,6 +107,7 @@ Window& Window::moveTo(int from_left, int from_top)
     // 1. Close using method Window.close, and notify screen, then screen notify view_manager.
     // 2. Return a new dict with win_close event with win_id.
     if (dictCheckEqual(result, "value", "window_close")) { this->close(); }
+    if (dictCheckEqual(result, "value", "main_process_stop")) { this->notifySubsriber({ { "main_process_stop", "true" } }); }
 
     return {};
 }

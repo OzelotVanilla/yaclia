@@ -90,7 +90,7 @@ ViewManager& ViewManager::end(string reason)
     showCursor();
     restoreConsole();
     backFromAlternativeScreen();
-    cout << reason << endl;
+    if (len(reason) > 0) { cout << reason << endl; }
     return *this;
 }
 
@@ -157,8 +157,8 @@ ViewManager& ViewManager::showMenu()
     }
     if (dictCheckEqual(info, "redraw", "true")) { this->need_to_draw = true; }
     if (dictCheckEqual(info, "menu_close", "true")) { this->showing_menu = false; }
+    if (dictCheckEqual(info, "main_process_stop", "true")) { this->end(); }
 }
-
 
 
 void ViewManager::handleInterrupt()

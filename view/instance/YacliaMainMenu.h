@@ -13,7 +13,8 @@ static VerticalScrollSelectField view_manager_menu_items =
         .addItem("Item 3")
         .addItem("Item 4")
         .addItem("Item 5")
-        .addItem("Quit", new string("window_close"))
+        .addItem("Quit Menu", new string("window_close"))
+        .addItem("Exit Yaclia", new string("main_process_stop"))
         .setId("view_manager_menu_items");
 
 static Window* view_manager_menu =

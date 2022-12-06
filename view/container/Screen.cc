@@ -159,6 +159,7 @@ Screen& Screen::setBackgroundChar(uchar c)
         }
         this->need_to_draw = true;
     }
+    if (dictCheckEqual(info, "main_process_stop", "true")) { this->notifySubsriber({ { "main_process_stop", "true" } }); }
     if (dictCheckEqual(info, "redraw", "true")) { this->notifySubsriber({ { "redraw", "true" } }); }
 }
 
