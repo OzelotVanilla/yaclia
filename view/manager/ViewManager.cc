@@ -5,11 +5,19 @@
 
 ViewManager& ViewManager::run()
 {
-    while (this->main_process_can_run)
+    try
     {
-        terminal_namesp::updateConsoleStatusInfo();
-        this->processInput();
-        this->draw();
+        while (this->main_process_can_run)
+        {
+            terminal_namesp::updateConsoleStatusInfo();
+            this->processInput();
+            this->draw();
+        }
+    }
+    catch (std::exception& any_err)
+    {
+        this->end(string(any_err.what()));
+        system("\n");
     }
 
     return *this;
@@ -76,12 +84,13 @@ ViewManager& ViewManager::start()
 }
 
 
-ViewManager& ViewManager::end()
+ViewManager& ViewManager::end(string reason)
 {
     this->main_process_can_run = false;
     showCursor();
     restoreConsole();
     backFromAlternativeScreen();
+    cout << reason << endl;
     return *this;
 }
 
@@ -128,15 +137,15 @@ ViewManager& ViewManager::showMenu()
 }
 
 
-ViewManager& ViewManager::closeMenu()
-{
-    if (this->showing_menu)
-    {
-        this->getActiveScreen().deleteWindow(&view_manager_menu);
-        this->showing_menu = false;
-    }
-    return *this;
-}
+// ViewManager& ViewManager::closeMenu()
+// {
+//     if (this->showing_menu)
+//     {
+//         this->getActiveScreen().deleteWindow(&view_manager_menu);
+//         this->showing_menu = false;
+//     }
+//     return *this;
+// }
 
 
 /* virtual */ void ViewManager::updateFromNotification(const NotificationDict& info)

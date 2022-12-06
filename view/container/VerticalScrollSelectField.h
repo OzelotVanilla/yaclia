@@ -23,7 +23,7 @@ struct ItemShowing
 };
 
 
-class VerticalScrollSelectField : public Field
+class VerticalScrollSelectField : public Field, virtual public Publisher
 {
   public:
     virtual void draw();
@@ -46,12 +46,24 @@ class VerticalScrollSelectField : public Field
 
     virtual string selectCurrentItem();
 
+    // virtual void notifySubsriber(const NotificationDict& info)
+    // {
+    //     for (size_t i = 0; i < len(*this->subscribers); i++)
+    //     {
+    //         this->subscribers->at(i)->updateFromNotification(info);
+    //     }
+    // }
 
     // template <typename ItemCallbackFunction>
     // VerticalScrollSelectField& addItem(string name, ItemCallbackFunction callback);
 
-    VerticalScrollSelectField&
-    setHasFrame(bool has_frame);
+    VerticalScrollSelectField& setHasFrame(bool has_frame);
+
+    VerticalScrollSelectField& setId(string new_id)
+    {
+        this->id = new_id;
+        return *this;
+    }
 
 
   protected:

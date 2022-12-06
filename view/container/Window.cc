@@ -115,6 +115,7 @@ Window& Window::addField(Field* f)
 
 /* virtual */ void Window::updateFromNotification(const NotificationDict& info)
 {
+    if (dictCheckEqual(info, "redraw", "true")) { this->notifySubsriber({ { "redraw", "true" } }); }
 }
 
 
@@ -252,4 +253,6 @@ Window::constructor(int width, int height, int top_offset, int left_offset)
     this->draw_info.char_view  = vector<string>(char_view_length);
     this->field_container      = FieldContainer::createSized(width - 2, height - 2);
     this->field_container.moveTo(left_offset + 1, top_offset + 1);
+    this->field_container.addSubscriber(this);
+    this->field_container.setId("main_field_container");
 }

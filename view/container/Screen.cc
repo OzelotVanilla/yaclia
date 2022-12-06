@@ -120,10 +120,10 @@ Screen& Screen::setBackgroundChar(uchar c)
 }
 
 
-void Screen::notifySubsriber(const NotificationDict& info)
-{
-    forEach(*this->subscribers, (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); }));
-}
+// void Screen::notifySubsriber(const NotificationDict& info)
+// {
+//     forEach(*this->subscribers, (function<void(Subscriber*)>)(lambda_ref(Subscriber * s) { s->updateFromNotification(info); }));
+// }
 
 
 /* virtual */ void Screen::updateFromNotification(const NotificationDict& info)
@@ -137,6 +137,7 @@ void Screen::notifySubsriber(const NotificationDict& info)
                 lambda_ref(Window * w_pointer) { return w_pointer->getId() == win_to_close_id; }
         );
     }
+    if (dictCheckEqual(info, "redraw", "true")) { this->notifySubsriber({ { "redraw", "true" } }); }
 }
 
 

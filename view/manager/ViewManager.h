@@ -25,7 +25,7 @@ using RegisteredInputHandle = std::unordered_map<ProcessedKeyInput, function<voi
 // There exist a static member.
 /* static ViewManager view_manager; */
 
-class ViewManager : public Subscriber
+class ViewManager : virtual public Subscriber
 {
   public:
     /**
@@ -37,7 +37,7 @@ class ViewManager : public Subscriber
     ViewManager& draw();
 
     ViewManager& start() noexcept(false);
-    ViewManager& end();
+    ViewManager& end(string reason = "");
 
     ViewManager& pushScreen(Screen* s);
     ViewManager& popScreen();

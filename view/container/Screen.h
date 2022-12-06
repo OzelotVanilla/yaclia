@@ -19,7 +19,7 @@
  *
  * It will hold several `Window`.
  */
-class Screen : public ViewContainer, public virtual Publisher, public virtual Subscriber
+class Screen : public ViewContainer, virtual public Publisher, virtual public Subscriber
 {
   public:
     Screen& pushInWindow(Window* w);
@@ -33,6 +33,11 @@ class Screen : public ViewContainer, public virtual Publisher, public virtual Su
     Screen& deleteWindow(Window* w)
     {
         return this->popOutWindow(w);
+    }
+
+    Screen& deleteWindowById(const string& win_id)
+    {
+        return *this;
     }
 
     Window& getActiveWindow()
@@ -57,7 +62,7 @@ class Screen : public ViewContainer, public virtual Publisher, public virtual Su
     Screen& setBackgroundChar(uchar c);
 
   public:
-    virtual void notifySubsriber(const NotificationDict& info);
+    // virtual void notifySubsriber(const NotificationDict& info);
     virtual void updateFromNotification(const NotificationDict& info);
 
   private:

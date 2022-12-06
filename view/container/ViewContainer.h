@@ -5,6 +5,7 @@
 #include "ViewDrawInfo.h"
 #include "../../util/key_input.h"
 #include "../../util/observer_pattern/Subscriber.trait.h"
+#include "../../util/observer_pattern/Publisher.trait.h"
 
 #ifdef constructor
 #undef constructor
@@ -15,7 +16,7 @@
 /**
  * Abstract class of View
  */
-/* abstract */ class ViewContainer
+/* abstract */ class ViewContainer : virtual public Publisher, virtual public Subscriber
 {
   public:
     /**
@@ -33,6 +34,9 @@
     virtual void draw() = 0;
 
     virtual void updateCharView() = 0;
+
+    // TODO: Should not be here.
+    virtual NotificationDict handleInput(const ProcessedKeyInput& key_input) = 0;
 
     //   private:
     // virtual void updateConsoleRelatedInfo() = 0;

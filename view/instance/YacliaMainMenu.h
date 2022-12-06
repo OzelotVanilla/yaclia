@@ -2,6 +2,8 @@
 #include "../container/VerticalScrollSelectField.h"
 #include "../container/Window.h"
 
+Window createViewManagerMenu();
+
 static VerticalScrollSelectField view_manager_menu_items =
     VerticalScrollSelectField::createSized(
         terminal_namesp::current_console_status.height - 6
@@ -11,12 +13,15 @@ static VerticalScrollSelectField view_manager_menu_items =
         .addItem("Item 3")
         .addItem("Item 4")
         .addItem("Item 5")
-        .addItem("Item 6");
+        .addItem("Item 6")
+        .setId("view_manager_menu_items");
 
 static Window view_manager_menu =
-    Window::createSized(
+    Window(
         terminal_namesp::current_console_status.width - 8,
-        terminal_namesp::current_console_status.height - 4
+        terminal_namesp::current_console_status.height - 4,
+        1,
+        1
     )
         .setTitle("Yaclia Menu")
         .setId("view_manager_menu")

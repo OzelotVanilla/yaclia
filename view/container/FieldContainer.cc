@@ -64,8 +64,7 @@
 /* virtual */ NotificationDict FieldContainer::handleInput(const ProcessedKeyInput& key_input)
 {
     // TODO: Now it is wrong: If no active, select first
-    if (this->active_field == nullptr) { this->active_field = this->fields->at(0); }
-
+    let a_field = this->active_field = this->fields->at(0);
     // If it is affecting the container
 
     // If it is not affecting the container.
@@ -79,6 +78,7 @@ FieldContainer& FieldContainer::addField(Field* f)
     // In the future, should be function to calculate width.
     f->moveTo(this->draw_info.position_from_left, this->draw_info.position_from_top);
     f->changeSize(this->draw_info.size_horizontal, this->draw_info.size_vertical);
+    f->addSubscriber(this);
     this->fields->push_back(f);
     return *this;
 }
@@ -94,6 +94,10 @@ FieldContainer& FieldContainer::moveTo(isize from_left, isize from_top)
 
 /* virtual */ void FieldContainer::updateFromNotification(const NotificationDict& info)
 {
+    if (dictCheckEqual(info, "redraw", "true"))
+    {
+        this->notifySubsriber({ { "redraw", "true" } });
+    }
 }
 
 

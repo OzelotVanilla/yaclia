@@ -104,7 +104,7 @@
                     : origin_str;
             origin_str =
                 has_frame
-                    ? "|\e[38;2;0;148;200m" + text_to_highlight + "\e[0m|"
+                    ? "│\e[38;2;0;148;200m" + text_to_highlight + "\e[0m│"
                     : "\e[48;2;125;125;125m" + text_to_highlight + "\e[0m";
         }
     }
@@ -197,6 +197,7 @@
     {
         this->position_selected--;
         this->need_to_update_char_view = true;
+        this->notifySubsriber({ { "redraw", "true" } });
     }
     return *this;
 }
@@ -208,6 +209,7 @@
     {
         this->position_selected++;
         this->need_to_update_char_view = true;
+        this->notifySubsriber({ { "redraw", "true" } });
     }
     return *this;
 }

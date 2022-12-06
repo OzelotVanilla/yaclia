@@ -41,6 +41,7 @@ class Field : public ViewContainer, virtual public Subscriber, virtual public Pu
         return *this;
     };
 
+
   public:
     // /* This use the simple iter version */ virtual void notifySubsriber(const NotificationDict& info);
     virtual void updateFromNotification(const NotificationDict& info) = 0;
