@@ -50,7 +50,7 @@
 
         // If draw info char view's size need to increase, push in more empty element
         {
-            let num_to_add = height - this->items.size();
+            let num_to_add = height - len(this->items);
             while (num_to_add-- > 0) { this->draw_info.char_view.push_back(""); }
         }
 
@@ -97,7 +97,7 @@
         // Highlight selected
         {
             let& origin_str =
-                (this->draw_info.char_view.at(this->num_selected + (has_frame ? 1 : 0)));
+                (this->draw_info.char_view.at(this->position_selected + (has_frame ? 1 : 0)));
             let text_to_highlight =
                 has_frame
                     ? origin_str.substr(3, origin_str.size() - 6) // Notice the vbar is a utf-8, substr index changes.
@@ -193,9 +193,9 @@
 
 /* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::selectScrollUp()
 {
-    if (this->position_selected > 0)
+    if (this->num_selected > 0)
     {
-        this->position_selected--;
+        if (this->position_selected > 0) { this->position_selected--; }
         this->num_selected--;
         this->need_to_update_char_view = true;
         this->notifySubsriber({ { "redraw", "true" } });
@@ -206,10 +206,14 @@
 
 /* virtual */ VerticalScrollSelectField& VerticalScrollSelectField::selectScrollDown()
 {
-    const let position_selected = this->position_selected;
-    if (position_selected < this->max_item_to_show - 1 and position_selected < this->items.size() - 1)
+    if (this->num_selected < this->items.size() - 1)
     {
-        this->position_selected++;
+        if (this->position_selected + (this->has_frame ? 2 : 0) < std::min(
+                this->max_item_to_show, this->draw_info.size_vertical - (this->has_frame ? 2_isize : 0_isize)
+            ))
+        {
+            this->position_selected++;
+        }
         this->num_selected++;
         this->need_to_update_char_view = true;
         this->notifySubsriber({ { "redraw", "true" } });
